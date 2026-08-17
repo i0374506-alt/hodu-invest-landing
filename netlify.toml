@@ -15,6 +15,22 @@
   to   = "/admin.html"
   status = 200
 
+# API 경로 → 함수 연결 (zip 드래그 배포에서도 동작하도록 명시)
+[[redirects]]
+  from = "/api/leads"
+  to   = "/.netlify/functions/leads"
+  status = 200
+
+[[redirects]]
+  from = "/api/content"
+  to   = "/.netlify/functions/content"
+  status = 200
+
+[[redirects]]
+  from = "/api/admin/*"
+  to   = "/.netlify/functions/admin/:splat"
+  status = 200
+
 # 기본 보안 헤더
 [[headers]]
   for = "/*"

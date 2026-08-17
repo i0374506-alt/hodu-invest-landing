@@ -24,24 +24,33 @@ hodu-netlify/
     └─ lib/shared.mjs            공통 유틸(토큰·검증) — 외부에 노출되지 않음
 ```
 
-## 2. 배포 순서 (GitHub 연동 · 권장)
+## 2-A. 배포 방법 ① zip 드래그 (가장 간단 · GitHub 불필요)
+
+1. 이 폴더에서 zip 만들기 — 더블클릭 대신 아래 명령으로 실행
+   ```
+   powershell -ExecutionPolicy Bypass -File .\zip만들기.ps1
+   ```
+   → 바탕화면에 **`호두인베스트-netlify-배포.zip`** 생성
+2. **https://app.netlify.com/drop** 접속 (※ `/start`는 GitHub 전용 화면이라 여기선 안 됩니다)
+3. zip 파일을 화면에 **드래그** → 몇 초 뒤 `https://<임의이름>.netlify.app` 발급
+4. **환경변수 등록** (아래 3번 항목) → 등록 후 **zip을 한 번 더 드래그**해야 적용됩니다
+   (수동 배포는 "재배포" 버튼이 없어서 다시 올리는 것이 재배포입니다)
+
+> zip 안의 함수 파일에는 필요한 패키지가 이미 포함(번들)되어 있어
+> Netlify가 `npm install` 을 하지 않아도 상담신청 API가 정상 동작합니다.
+> **문구·내용을 수정한 뒤에는 zip을 다시 만들어 올려야 합니다.**
+
+## 2-B. 배포 방법 ② GitHub 연동 (수정할 때마다 자동 재배포)
 
 1. **GitHub에 저장소 만들기** (예: `hodu-invest-landing`, Private 권장)
-2. 이 폴더에서 아래 명령 실행 (이미 `git init` + 첫 커밋까지 되어 있습니다)
+2. 이 폴더에서 (이미 `git init` + 커밋까지 되어 있습니다)
    ```
    git remote add origin https://github.com/<내계정>/hodu-invest-landing.git
    git branch -M main
    git push -u origin main
    ```
-3. **https://app.netlify.com/start** → **GitHub** 선택 → 방금 만든 저장소 선택
-4. 빌드 설정은 `netlify.toml`을 자동으로 읽습니다. 화면에 아래처럼 나오면 그대로 두세요.
-   - Build command : `npm install --omit=dev`
-   - Publish directory : `public`
-   - Functions directory : `netlify/functions`
-5. **Deploy** 클릭 → 1~2분 후 `https://<임의이름>.netlify.app` 발급
-
-> 참고 · 드래그&드롭 배포(app.netlify.com/drop)는 **쓰지 마세요.**
-> 패키지 설치 단계가 없어서 상담신청 API가 동작하지 않습니다.
+3. **https://app.netlify.com/start** → GitHub → 저장소 선택 → Deploy
+   (빌드 설정은 `netlify.toml`을 자동으로 읽습니다)
 
 ## 3. ⚠ 배포 직후 반드시 할 일 — 환경변수 등록
 
@@ -52,7 +61,9 @@ Netlify 대시보드 → **Site configuration → Environment variables → Add 
 | `ADMIN_PASSWORD` | (직접 정한 강한 비밀번호) | 관리자 로그인 · **필수** |
 | `ADMIN_SECRET` | 아무 긴 랜덤 문자열 32자 이상 | 로그인 토큰 서명용 · 권장 |
 
-등록 후 **Deploys → Trigger deploy → Deploy site** 로 한 번 재배포해야 적용됩니다.
+등록 후 재배포해야 적용됩니다.
+- zip 배포: 같은 zip을 **다시 드래그**
+- GitHub 배포: **Deploys → Trigger deploy → Deploy site**
 `ADMIN_PASSWORD`가 없으면 관리자 로그인이 막히고, 상담신청 접수만 동작합니다.
 
 ## 4. 사용 방법

@@ -20,8 +20,10 @@ async function allLeads() {
 }
 
 export default async (req) => {
-  const path = new URL(req.url).pathname.replace(/\/+$/, "");
-  const action = path.split("/api/admin/")[1] || "";
+  /* /api/admin/<action> 과 /.netlify/functions/admin/<action> 둘 다 지원 */
+  const segs = new URL(req.url).pathname.split("/").filter(Boolean);
+  const i = segs.lastIndexOf("admin");
+  const action = i >= 0 ? (segs[i + 1] || "") : (segs.pop() || "");
 
   /* ── 로그인 ─────────────────────────────────────────── */
   if (action === "login") {
