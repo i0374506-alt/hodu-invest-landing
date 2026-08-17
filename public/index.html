@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>호두인베스트 | 무료 투자상담 신청</title>
+<meta name="description" content="금융위원회 등록 투자자문사 호두인베스트. 전문가와 1:1 무료 투자상담을 신청하세요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!-- =====================================================================
+     ▼▼▼ 여기(CONFIG)만 고치면 페이지 내용이 전부 바뀝니다 ▼▼▼
+     - 또는 주소 뒤에 ?edit=1 을 붙여 관리자 비밀번호로 로그인하면
+       화면에서 직접 글자를 고칠 수 있습니다. (일반 방문자에게는 보이지 않음)
+     ===================================================================== -->
+<script>
+const CONFIG = {
+  /* ---------- 상단 브랜드 ---------- */
+  brand: {
+    en: "HODU INVEST",
+    ko: "호두인베스트",
+    badge: "금융위원회 등록 투자자문사"
+  },
+
+  /* ---------- 요구사항 3) 우측 상단 기관 로고 (클릭 시 홈페이지 이동) ---------- */
+  topLinks: [
+    { key: "fine", name: "파 인",     sub: "금융소비자 정보포털", url: "https://fine.fss.or.kr", img: "" },
+    { key: "fsc",  name: "금융위원회", sub: "",                  url: "https://www.fsc.go.kr",  img: "" },
+    { key: "fss",  name: "금융감독원", sub: "",                  url: "https://www.fss.or.kr",  img: "" }
+  ],
+
+  /* ---------- 히어로(첫 화면) ---------- */
+  hero: {
+    title1: "투자에는 정보가 아니라",
+    title2: "판단할 수 있는 기준이 필요합니다.",
+    desc1: "시장 흐름부터 보유 종목까지,",
+    desc2: "혼자 고민하고 있다면 전문 투자자문사의 관점으로 확인해보세요.",
+    features: [
+      { icon: "user",  t1: "전문가와 1:1 상담", t2: "맞춤 투자 전략 제안" },
+      { icon: "chart", t1: "보유 종목 진단",    t2: "리스크와 기회 점검" },
+      { icon: "check", t1: "개인 맞춤 컨설팅",  t2: "더 나은 투자 기준 제시" }
+    ]
+  },
+
+  /* ---------- 상담 신청 폼 ---------- */
+  form: {
+    title: "무료 투자상담 신청하기",
+    note: "상담은 무료, 더 큰 기회는 지금부터.",
+    namePlaceholder: "성함을 입력해주세요",
+    phonePlaceholder: "010 - 0000 - 0000",
+    expPlaceholder: "투자경험 선택해주세요",
+    experiences: ["1년 미만", "1~3년", "3~5년", "5년 이상"],
+    interestLabel: "관심 분야 (선택)",
+    /* 요구사항 4) 관심분야 5개 */
+    interests: ["단기", "스윙", "중장기주", "IPO(엔젤투자)", "기타"],
+    consent1: "개인정보 수집 및 이용에 동의합니다. (필수)",
+    consent2: "투자상담을 위한 전화 연락에 동의합니다. (필수)",
+    consentMore: "자세히 보기",
+    consentMoreUrl: "#privacy",
+    submit: "무료 투자상담 신청하기",
+    /* 상담신청 저장 API (Netlify Functions). 비우면 전송하지 않습니다. */
+    endpoint: "/api/leads",
+    successMsg: "상담 신청이 접수되었습니다. 확인 후 순차적으로 연락드리겠습니다.",
+    demoMsg: "[미리보기] 아직 서버가 연결되지 않아 실제 전송은 되지 않았습니다."
+  },
+
+  /* ---------- 신뢰 섹션(남색) ---------- */
+  trust: {
+    title1: "믿을 수 있는 투자자문사인지",
+    title2: "직접 확인해보세요.",
+    badge: "금융위원회 등록 투자자문사 HODU INVEST",
+    desc1: "호두인베스트는 관련 법령에 따라 등록된",
+    desc2: "정식 투자자문사입니다.",
+    desc3: "금융감독원 금융소비자정보포털 FINE(파인)에서",
+    desc4: "회사 등록 여부를 직접 확인하실 수 있습니다.",
+    /* 요구사항 1) 노란 상자 자리 = 홈페이지 버튼 2개 */
+    buttons: [
+      { label: "자문사 홈페이지 바로가기", url: "https://www.hoduinvest.co.kr", style: "gold" },
+      { label: "FINE 조회하기",           url: "https://fine.fss.or.kr",        style: "line" }
+    ],
+    /* 요구사항 2) FINE 조회 카드 (남색 칸에 꽉 차게 확대) */
+    card: {
+      brand: "FINE",
+      brandSub: "금융소비자정보포털",
+      right: "금융회사 조회",
+      title: "투자자문업자",
+      rows: [
+        { k: "회사명",   v: "호두인베스트" },
+        { k: "등록번호", v: "제 2024-000000호" },
+        { k: "업종",     v: "투자자문업" },
+        { k: "등록일",   v: "2024-00-00" },
+        { k: "기관",     v: "금융위원회" }
+      ],
+      note: "※ 실제 FINE(파인) 조회 화면 예시"
+    }
+  },
+
+  /* ---------- 모바일 하단 고정 버튼 ---------- */
+  mobileCta: { label: "무료 투자상담 신청하기", enabled: true },
+
+  /* ---------- 푸터 ---------- */
+  footer: {
+    menus: [
+      { label: "회사소개",          url: "#" },
+      { label: "투자자문업",        url: "#" },
+      { label: "투자 정보 제공방식", url: "#" },
+      { label: "유의사항",          url: "#" },
+      { label: "고객 센터",         url: "#" }
+    ],
+    tel: "대표전화 02-0000-0000",
+    email: "이메일 info@hoduinvest.co.kr",
+    addr: "서울특별시 강남구 테헤란로 000, 00층",
+    disclaimer: [
+      "투자에는 원금 손실이 발생할 수 있으며, 과거의 운용 성과가 미래의 수익을 보장하지 않습니다.",
+      "본 상담은 투자 권유가 아니며, 최종 투자 결정과 그에 따른 책임은 투자 본인에게 있습니다.",
+      "개인정보는 상담 및 안내 목적으로만 이용되며, 동의 철회 시 즉시 파기 또는 삭제됩니다."
+    ],
+    company: [
+      "호두인베스트  |  대표자 OOO  |  사업자등록번호 000-00-00000",
+      "투자자문업 등록번호 제 2024-000000호  |  금융위원회 등록"
+    ],
+    copyright: "© HODU INVEST. All rights reserved."
+  }
+};
+</script>
+<!-- ▲▲▲ CONFIG 끝 ▲▲▲ -->
+
+<style>
+:root{
+  --navy:#0b2247; --navy-2:#0d2a55; --navy-deep:#081a37;
+  --gold:#c8a24a; --gold-soft:#e0c073;
+  --ink:#10203c; --sub:#5a6a86; --line:#e4e9f2;
+  --bg:#eef2f9; --white:#fff;
+  --radius:14px;
+  --wrap:1240px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Pretendard","Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink); background:var(--white); line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
+
+/* ================= HEADER ================= */
+.hd{background:var(--white);border-bottom:1px solid var(--line)}
+.hd-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;max-width:var(--wrap);margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:38px;height:44px;flex:none}
+.logo-txt .en,.logo-txt .ko{display:block}
+.logo-txt .en{font-size:21px;font-weight:800;letter-spacing:.06em;color:var(--navy);line-height:1.15}
+.logo-txt .ko{font-size:12.5px;color:var(--sub);letter-spacing:.02em}
+
+.gov{display:flex;align-items:center;gap:10px}
+.gov a{
+  display:flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--line);
+  border-radius:999px;background:#fbfcfe;transition:.18s;white-space:nowrap;
+}
+.gov a:hover{border-color:var(--gold);background:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,34,71,.08)}
+.gov .gnm{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+.gov .gsub{font-size:10px;color:#8b98ae;display:block;font-weight:500;letter-spacing:-.02em}
+.gov img,.gov svg{width:22px;height:22px;flex:none;object-fit:contain}
+.gov-div{width:1px;height:20px;background:var(--line)}
+.hd-badge{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap}
+
+/* ================= HERO ================= */
+.hero{position:relative;background:var(--bg);overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(900px 420px at 82% -10%, rgba(255,255,255,.95), transparent 70%),
+    linear-gradient(120deg,#f7f9fd 0%,#e9eff8 55%,#dfe7f4 100%);
+}
+.hero::after{
+  content:"";position:absolute;right:-8%;top:-30%;width:60%;height:160%;
+  background:linear-gradient(135deg,rgba(255,255,255,.75),rgba(255,255,255,0));
+  transform:skewX(-14deg);
+}
+.hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1fr 660px;gap:48px;align-items:center;
+  max-width:var(--wrap);margin:0 auto;padding:64px 28px 72px}
+.h-title{font-size:44px;font-weight:800;line-height:1.32;letter-spacing:-.035em;color:var(--navy);margin:0}
+.h-bar{width:64px;height:4px;background:var(--gold);border-radius:2px;margin:26px 0 24px}
+.h-desc{font-size:17px;color:#42536f;line-height:1.75;margin:0}
+.h-feats{display:flex;gap:0;margin-top:40px;flex-wrap:wrap}
+.h-feat{display:flex;align-items:center;gap:12px;padding-right:26px}
+.h-feat + .h-feat{border-left:1px solid #cfd8e6;padding-left:26px}
+.h-ico{width:52px;height:52px;flex:none;border-radius:50%;background:#e3eaf6;display:grid;place-items:center}
+.h-ico svg{width:26px;height:26px}
+.h-feat .t1{font-size:15px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.h-feat .t2{font-size:13.5px;color:#6a7893;letter-spacing:-.02em}
+
+/* ================= FORM CARD ================= */
+.card{background:#fff;border-radius:18px;padding:30px 30px 28px;box-shadow:0 22px 60px rgba(11,34,71,.14)}
+.card-hd{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.card-hd h2{font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--navy);margin:0}
+.card-hd .note{font-size:13px;color:#7b879c}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.f-field{position:relative}
+.f-field .fi{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;opacity:.55;pointer-events:none}
+.f-field input,.f-field select{
+  width:100%;height:52px;border:1px solid #dde3ee;border-radius:10px;background:#fafbfe;
+  padding:0 14px 0 44px;font-size:15px;color:var(--ink);outline:none;transition:.15s;
+  -webkit-appearance:none;appearance:none;
+}
+.f-field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6a86' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:18px;padding-right:38px;color:#8a95a8}
+.f-field select.filled{color:var(--ink)}
+.f-field input:focus,.f-field select:focus{border-color:var(--navy);background:#fff;box-shadow:0 0 0 3px rgba(11,34,71,.08)}
+.f-field input::placeholder{color:#a6b0c1}
+
+.interests{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;border:1px solid #e6ebf3;border-radius:10px;padding:12px 14px;margin:14px 0 12px;background:#fbfcfe}
+.interests .lb{font-size:14px;font-weight:700;color:var(--navy);margin-right:4px;white-space:nowrap}
+.chk{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:14px;color:#3d4c67;letter-spacing:-.02em}
+.chk input{position:absolute;opacity:0;width:0;height:0}
+.chk .box{width:18px;height:18px;border:1.5px solid #c4cddd;border-radius:5px;background:#fff;flex:none;display:grid;place-items:center;transition:.15s}
+.chk .box svg{width:12px;height:12px;opacity:0;stroke:#fff;stroke-width:3}
+.chk input:checked + .box{background:var(--navy);border-color:var(--navy)}
+.chk input:checked + .box svg{opacity:1}
+.chk input:focus-visible + .box{box-shadow:0 0 0 3px rgba(11,34,71,.18)}
+
+.consents{display:flex;flex-direction:column;gap:9px;margin:4px 0 18px}
+.consent-line{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.consent-line .chk{font-size:13.5px;color:#4a5872}
+.more{font-size:12.5px;color:#8b97ac;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
+.more:hover{color:var(--navy)}
+.btn-submit{
+  width:100%;height:60px;border:0;border-radius:11px;background:var(--navy);color:#fff;
+  font-size:18px;font-weight:700;letter-spacing:-.02em;cursor:pointer;transition:.18s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-submit:hover{background:#0f2d5c;transform:translateY(-1px);box-shadow:0 10px 24px rgba(11,34,71,.28)}
+.btn-submit:active{transform:none}
+.hp{position:absolute;left:-9999px;opacity:0;height:0}
+
+/* ================= TRUST (NAVY) ================= */
+.trust{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff}
+.trust-in{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:stretch;
+  max-width:var(--wrap);margin:0 auto;padding:66px 28px}
+.trust-left{display:flex;flex-direction:column;justify-content:center}
+.t-title{font-size:34px;font-weight:800;line-height:1.4;letter-spacing:-.035em;margin:0}
+.t-bar{width:56px;height:4px;background:var(--gold);border-radius:2px;margin:22px 0}
+.t-badge{font-size:20px;font-weight:800;color:var(--gold-soft);letter-spacing:-.03em;margin:0 0 20px}
+.t-desc{font-size:15.5px;line-height:1.85;color:#c9d5e8;margin:0}
+.t-desc + .t-desc{margin-top:14px}
+.t-btns{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+.t-btn{
+  flex:1 1 220px;min-height:60px;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:9px;
+  font-size:16.5px;font-weight:700;letter-spacing:-.02em;transition:.18s;padding:0 20px;text-align:center;
+}
+.t-btn svg{width:17px;height:17px;flex:none}
+.t-btn.gold{background:var(--gold);color:#1b1405;box-shadow:0 10px 26px rgba(200,162,74,.28)}
+.t-btn.gold:hover{background:#d5b25f;transform:translateY(-2px)}
+.t-btn.line{border:1.6px solid var(--gold);color:var(--gold-soft);background:transparent}
+.t-btn.line:hover{background:rgba(200,162,74,.14);transform:translateY(-2px)}
+
+/* FINE 카드 - 남색 영역 꽉 차게 */
+.fine{
+  background:#fff;border-radius:16px;padding:32px 34px;color:var(--ink);
+  box-shadow:0 26px 60px rgba(0,0,0,.28);height:100%;display:flex;flex-direction:column;
+}
+.fine-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:2px solid #eef1f7}
+.fine-brand{display:flex;align-items:center;gap:9px}
+.fine-brand svg{width:34px;height:34px;flex:none}
+.fine-brand .b1{font-size:24px;font-weight:800;color:#1e6fc4;letter-spacing:-.02em}
+.fine-brand .b2{font-size:13px;color:#5c6a80;font-weight:600}
+.fine-right{font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.fine-title{font-size:20px;font-weight:800;color:var(--navy);margin:22px 0 12px;padding-bottom:12px;border-bottom:1.5px solid #dfe5ef}
+.fine-tb{flex:1;display:flex;flex-direction:column}
+.fine-tr{display:grid;grid-template-columns:170px 1fr;flex:1;min-height:52px;border-bottom:1px solid #eceff5}
+.fine-tr:last-child{border-bottom:0}
+.fine-tr .k{background:#f6f8fc;display:flex;align-items:center;padding:0 18px;font-size:15.5px;font-weight:600;color:#3f4d66}
+.fine-tr .v{display:flex;align-items:center;padding:0 18px;font-size:15.5px;color:var(--ink)}
+.fine-note{font-size:12.5px;color:#98a3b6;margin-top:16px}
+
+/* ================= FOOTER ================= */
+.ft{background:#f7f9fc;border-top:1px solid var(--line);padding:34px 0 40px}
+.ft-top{display:grid;grid-template-columns:auto 1fr auto;gap:30px;align-items:start}
+.ft-menu{display:flex;flex-wrap:wrap;gap:10px 34px;justify-content:center;padding-top:8px}
+.ft-menu a{font-size:14.5px;font-weight:600;color:#3f4d66}
+.ft-menu a:hover{color:var(--navy)}
+.ft-contact{font-size:13.5px;color:#5a6a86;line-height:1.85;text-align:right}
+.ft-line{height:1px;background:var(--line);margin:26px 0 20px}
+.ft-bot{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
+.ft-note{font-size:12.5px;color:#7b879c;line-height:1.95;margin:0}
+.ft-co{font-size:12.5px;color:#7b879c;line-height:1.95;text-align:right}
+
+/* ================= MOBILE CTA ================= */
+.mcta{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);
+}
+.mcta button{width:100%;height:54px;border:0;border-radius:11px;background:var(--navy);color:#fff;font-size:16.5px;font-weight:700}
+
+/* ================= TOAST ================= */
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);z-index:100;
+  background:var(--navy);color:#fff;padding:14px 22px;border-radius:12px;font-size:14.5px;
+  box-shadow:0 14px 40px rgba(0,0,0,.3);transition:.28s;max-width:88vw;text-align:center;
+}
+.toast.on{transform:translate(-50%,0)}
+.toast.err{background:#b3271e}
+
+/* ================= 편집 모드 (관리자 전용) ================= */
+.ed-fab,.ed-panel{display:none}          /* 기본: 일반 방문자에게 숨김 */
+body.admin .ed-fab{display:block}
+body.admin .ed-panel.on{display:block}
+.ed-fab{
+  position:fixed;right:18px;bottom:18px;z-index:90;border:0;border-radius:999px;cursor:pointer;
+  background:var(--navy);color:#fff;font-size:14px;font-weight:700;padding:12px 18px;
+  box-shadow:0 8px 24px rgba(11,34,71,.32);opacity:.9;
+}
+.ed-fab:hover{opacity:1}
+/* 관리자 로그인 오버레이 */
+.gate{position:fixed;inset:0;z-index:120;background:rgba(8,26,55,.72);display:grid;place-items:center;padding:20px}
+.gate-box{background:#fff;border-radius:14px;padding:26px 24px;width:340px;max-width:100%;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.gate-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.gate-box p{margin:0 0 16px;font-size:12.5px;color:var(--sub);line-height:1.6}
+.gate-box input{width:100%;height:46px;border:1px solid var(--line);border-radius:9px;padding:0 12px;font-size:15px;font-family:inherit}
+.gate-box .err{color:#c0392b;font-size:12.5px;margin:8px 0 0;display:none}
+.gate-acts{display:flex;gap:8px;margin-top:14px}
+.gate-acts button{flex:1;height:44px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;border:1px solid var(--navy);background:#fff;color:var(--navy)}
+.gate-acts button.pri{background:var(--navy);color:#fff}
+.ed-fab.on{background:var(--gold);color:#1b1405}
+.ed-panel{
+  position:fixed;right:18px;bottom:74px;z-index:91;width:360px;max-width:calc(100vw - 36px);
+  max-height:72vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 18px 50px rgba(11,34,71,.24);padding:18px;display:none;
+}
+.ed-panel h3{margin:0 0 6px;font-size:15px;color:var(--navy)}
+.ed-panel p.hint{margin:0 0 14px;font-size:12.5px;color:var(--sub);line-height:1.6}
+.ed-panel label{display:block;font-size:12px;color:var(--sub);margin:10px 0 4px}
+.ed-panel input,.ed-panel textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:13px;font-family:inherit}
+.ed-panel textarea{height:150px;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;line-height:1.5}
+.ed-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ed-acts button{flex:1 1 46%;height:38px;border-radius:8px;border:1px solid var(--navy);background:#fff;color:var(--navy);font-size:13px;font-weight:700;cursor:pointer}
+.ed-acts button.pri{background:var(--navy);color:#fff}
+.ed-acts button.warn{border-color:#c33;color:#c33}
+body.editing [data-k]{outline:1.5px dashed rgba(200,162,74,.85);outline-offset:2px;border-radius:3px;cursor:text}
+body.editing [data-k]:focus{outline:2px solid var(--gold);background:rgba(200,162,74,.12)}
+body.editing a{pointer-events:none}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:1180px){
+  .hero-in{grid-template-columns:1fr 520px;gap:36px}
+  .h-title{font-size:38px}
+  .trust-in{gap:38px}
+  .t-title{font-size:30px}
+  .fine-tr{grid-template-columns:140px 1fr}
+}
+@media (max-width:960px){
+  .hd-in{padding:12px 18px;flex-wrap:wrap;gap:10px}
+  .hd-badge{display:none}
+  .gov{gap:6px}
+  .gov a{padding:6px 9px}
+  .gov .gsub{display:none}
+  .gov .gnm{font-size:12px}
+  .hero-in{grid-template-columns:1fr;padding:44px 18px 52px;gap:32px}
+  .h-title{font-size:32px}
+  .h-desc{font-size:16px}
+  .h-feats{gap:14px}
+  .h-feat{flex:1 1 100%;padding:0}
+  .h-feat + .h-feat{border-left:0;padding-left:0}
+  .trust-in{grid-template-columns:1fr;padding:48px 18px;gap:32px}
+  .t-title{font-size:27px}
+  .wrap{padding:0 18px}
+  .ft-top{grid-template-columns:1fr;gap:20px;text-align:center}
+  .ft-menu{justify-content:center}
+  .ft-contact{text-align:center}
+  .ft-bot{grid-template-columns:1fr;text-align:center}
+  .ft-co{text-align:center}
+  .logo{justify-content:center}
+}
+@media (max-width:640px){
+  .hd-in{justify-content:center;flex-direction:column}
+  .gov{width:100%;justify-content:center;gap:6px}
+  .gov a{flex:1 1 0;justify-content:center;padding:8px 4px;border-radius:10px}
+  .gov .gnm{font-size:11.5px;letter-spacing:-.04em}
+  .gov img,.gov svg{width:18px;height:18px}
+  .gov-div{display:none}
+  .hero-in{padding:32px 16px 40px}
+  .h-title{font-size:25px;line-height:1.4}
+  .h-bar{margin:18px 0 16px}
+  .h-desc{font-size:14.5px}
+  .h-feats{margin-top:26px;gap:10px}
+  .h-ico{width:44px;height:44px}
+  .h-ico svg{width:22px;height:22px}
+  .h-feat .t1{font-size:14px}
+  .h-feat .t2{font-size:12.5px}
+  .card{padding:20px 16px 22px;border-radius:14px}
+  .card-hd h2{font-size:20px}
+  .card-hd .note{font-size:12px}
+  .f-row{grid-template-columns:1fr;gap:10px;margin-bottom:10px}
+  .f-field input,.f-field select{height:50px;font-size:15px}
+  .interests{display:block;padding:12px}
+  .interests .lb{display:block;margin:0 0 10px}
+  .interests .chk-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .chk{font-size:13.5px}
+  .btn-submit{height:56px;font-size:16.5px}
+  .trust-in{padding:38px 16px;gap:26px}
+  .t-title{font-size:23px}
+  .t-badge{font-size:16.5px}
+  .t-desc{font-size:14.5px;line-height:1.8}
+  .t-btns{flex-direction:column;gap:10px;margin-top:26px}
+  .t-btn{flex:1 1 auto;width:100%;min-height:54px;font-size:15.5px}
+  .fine{padding:20px 16px;border-radius:14px}
+  .fine-brand svg{width:28px;height:28px}
+  .fine-brand .b1{font-size:19px}
+  .fine-brand .b2{font-size:11px}
+  .fine-right{font-size:14.5px}
+  .fine-title{font-size:16.5px;margin:16px 0 8px}
+  .fine-tr{grid-template-columns:92px 1fr;min-height:44px}
+  .fine-tr .k{font-size:13px;padding:0 10px}
+  .fine-tr .v{font-size:13.5px;padding:0 12px}
+  .fine-note{font-size:11.5px}
+  .ft{padding:26px 0 30px}
+  .ft-menu{gap:10px 18px}
+  .ft-menu a{font-size:13px}
+  .ft-contact{font-size:12.5px}
+  .ft-note,.ft-co{font-size:11.5px;line-height:1.9}
+  .mcta{display:block}
+  body{padding-bottom:78px}
+  .ed-fab{bottom:82px;right:12px;padding:10px 14px;font-size:13px}
+  .ed-panel{bottom:136px;right:12px}
+}
+@media (max-width:380px){
+  .gov .gnm{font-size:10.5px}
+  .h-title{font-size:22.5px}
+  .interests .chk-wrap{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="hd">
+  <div class="hd-in">
+    <a class="logo" href="#top">
+      <svg class="logo-mark" viewBox="0 0 40 46" fill="none" aria-hidden="true">
+        <path d="M4 4v38M28 4v38M4 23h24" stroke="#0b2247" stroke-width="4" stroke-linecap="square"/>
+        <path d="M34 6v34" stroke="#c8a24a" stroke-width="3.4" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-txt">
+        <span class="en" data-k="brand.en">HODU INVEST</span>
+        <span class="ko" data-k="brand.ko">호두인베스트</span>
+      </span>
+    </a>
+
+    <!-- 요구사항 3) 파인 / 금융위원회 / 금융감독원 -->
+    <nav class="gov" id="govLinks" aria-label="관련 기관 바로가기"></nav>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="hero-in">
+    <div class="hero-left">
+      <h1 class="h-title">
+        <span data-k="hero.title1">투자에는 정보가 아니라</span><br>
+        <span data-k="hero.title2">판단할 수 있는 기준이 필요합니다.</span>
+      </h1>
+      <div class="h-bar"></div>
+      <p class="h-desc">
+        <span data-k="hero.desc1">시장 흐름부터 보유 종목까지,</span><br>
+        <span data-k="hero.desc2">혼자 고민하고 있다면 전문 투자자문사의 관점으로 확인해보세요.</span>
+      </p>
+      <div class="h-feats" id="heroFeats"></div>
+    </div>
+
+    <!-- ===== 상담 신청 폼 ===== -->
+    <div class="card" id="apply">
+      <div class="card-hd">
+        <h2 data-k="form.title">무료 투자상담 신청하기</h2>
+        <span class="note" data-k="form.note">상담은 무료, 더 큰 기회는 지금부터.</span>
+      </div>
+
+      <form id="leadForm" novalidate>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="f-row">
+          <div class="f-field">
+            <svg class="fi" viewBox="0 0 24 24" fill="none" stroke="#5a6a86" stroke-width="1.8"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c1.4-3.6 4.2-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg>
+            <input id="f-name" type="text" autocomplete="name" maxlength="20">
+          </div>
+          <div class="f-field">
+            <svg class="fi" viewBox="0 0 24 24" fill="none" stroke="#5a6a86" stroke-width="1.8"><path d="M4 5h5l2 5-3 2a12 12 0 006 6l2-3 5 2v5c-9 0-17-8-17-17z"/></svg>
+            <select id="f-exp"></select>
+          </div>
+        </div>
+
+        <div class="f-row" style="grid-template-columns:1fr">
+          <div class="f-field">
+            <svg class="fi" viewBox="0 0 24 24" fill="none" stroke="#5a6a86" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M10.5 18.4h3"/></svg>
+            <input id="f-phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13">
+          </div>
+        </div>
+
+        <!-- 요구사항 4) 관심분야 5개 -->
+        <div class="interests">
+          <span class="lb" data-k="form.interestLabel">관심 분야 (선택)</span>
+          <span class="chk-wrap" id="interestBox"></span>
+        </div>
+
+        <div class="consents">
+          <div class="consent-line">
+            <label class="chk">
+              <input type="checkbox" id="c1">
+              <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>
+              <span data-k="form.consent1">개인정보 수집 및 이용에 동의합니다. (필수)</span>
+            </label>
+            <a class="more" id="consentMore" href="#privacy">
+              <span data-k="form.consentMore">자세히 보기</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="consent-line">
+            <label class="chk">
+              <input type="checkbox" id="c2">
+              <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>
+              <span data-k="form.consent2">투자상담을 위한 전화 연락에 동의합니다. (필수)</span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-submit" type="submit">
+          <span data-k="form.submit">무료 투자상담 신청하기</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST (NAVY) ===== -->
+<section class="trust">
+  <div class="trust-in">
+    <div class="trust-left">
+      <h2 class="t-title">
+        <span data-k="trust.title1">믿을 수 있는 투자자문사인지</span><br>
+        <span data-k="trust.title2">직접 확인해보세요.</span>
+      </h2>
+      <div class="t-bar"></div>
+      <p class="t-badge" data-k="trust.badge">금융위원회 등록 투자자문사 HODU INVEST</p>
+      <p class="t-desc">
+        <span data-k="trust.desc1">호두인베스트는 관련 법령에 따라 등록된</span><br>
+        <span data-k="trust.desc2">정식 투자자문사입니다.</span>
+      </p>
+      <p class="t-desc">
+        <span data-k="trust.desc3">금융감독원 금융소비자정보포털 FINE(파인)에서</span><br>
+        <span data-k="trust.desc4">회사 등록 여부를 직접 확인하실 수 있습니다.</span>
+      </p>
+      <!-- 요구사항 1) 홈페이지 버튼 2개 -->
+      <div class="t-btns" id="trustBtns"></div>
+    </div>
+
+    <!-- 요구사항 2) FINE 조회 카드 확대 -->
+    <div class="fine">
+      <div class="fine-hd">
+        <div class="fine-brand">
+          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <circle cx="20" cy="20" r="17" fill="#e8f1fb"/>
+            <circle cx="20" cy="20" r="17" stroke="#1e6fc4" stroke-width="2"/>
+            <path d="M3.5 20h33M20 3.2c4.4 4.6 6.6 10.4 6.6 16.8S24.4 32.2 20 36.8c-4.4-4.6-6.6-10.4-6.6-16.8S15.6 7.8 20 3.2z" stroke="#1e6fc4" stroke-width="1.7"/>
+          </svg>
+          <span>
+            <span class="b1" data-k="trust.card.brand">FINE</span>
+            <span class="b2" data-k="trust.card.brandSub">금융소비자정보포털</span>
+          </span>
+        </div>
+        <span class="fine-right" data-k="trust.card.right">금융회사 조회</span>
+      </div>
+      <div class="fine-title" data-k="trust.card.title">투자자문업자</div>
+      <div class="fine-tb" id="fineRows"></div>
+      <div class="fine-note" data-k="trust.card.note">※ 실제 FINE(파인) 조회 화면 예시</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <a class="logo" href="#top">
+        <svg class="logo-mark" viewBox="0 0 40 46" fill="none" aria-hidden="true">
+          <path d="M4 4v38M28 4v38M4 23h24" stroke="#0b2247" stroke-width="4" stroke-linecap="square"/>
+          <path d="M34 6v34" stroke="#c8a24a" stroke-width="3.4" stroke-linecap="round"/>
+        </svg>
+        <span class="logo-txt">
+          <span class="en">HODU INVEST</span>
+          <span class="ko">호두인베스트</span>
+        </span>
+      </a>
+      <nav class="ft-menu" id="ftMenu"></nav>
+      <div class="ft-contact">
+        <div data-k="footer.tel">대표전화 02-0000-0000</div>
+        <div data-k="footer.email">이메일 info@hoduinvest.co.kr</div>
+        <div data-k="footer.addr">서울특별시 강남구 테헤란로 000, 00층</div>
+      </div>
+    </div>
+    <div class="ft-line"></div>
+    <div class="ft-bot">
+      <p class="ft-note" id="ftNote"></p>
+      <div class="ft-co" id="ftCo"></div>
+    </div>
+  </div>
+</footer>
+
+<!-- 모바일 하단 고정 CTA -->
+<div class="mcta" id="mcta"><button type="button" data-k="mobileCta.label">무료 투자상담 신청하기</button></div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 편집 모드 UI -->
+<button class="ed-fab" id="edFab" type="button">✏ 내용편집</button>
+<div class="ed-panel" id="edPanel">
+  <h3>내용 편집 모드</h3>
+  <p class="hint">페이지의 <b>글자를 직접 클릭해서</b> 고칠 수 있습니다.<br><b>사이트에 반영</b>을 눌러야 실제 방문자 화면에 적용됩니다. (누르지 않고 창을 닫으면 사라집니다)</p>
+  <div id="urlFields"></div>
+  <label>고급 · 전체 내용(JSON) 직접 수정</label>
+  <textarea id="jsonBox" spellcheck="false"></textarea>
+  <div class="ed-acts">
+    <button type="button" class="pri" id="btnPublish" style="flex:1 1 100%">사이트에 반영</button>
+    <button type="button" id="btnApplyJson">JSON 적용</button>
+    <button type="button" id="btnCopy">JSON 복사</button>
+    <button type="button" id="btnSaveHtml">HTML 백업</button>
+    <button type="button" class="warn" id="btnReset">처음 문구로</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   1) 저장된 편집 내용 불러오기
+   ============================================================ */
+const DEFAULTS = JSON.parse(JSON.stringify(CONFIG));
+let editing = false;          // 편집 모드 on/off
+let dirty = false;            // 저장(반영) 안 된 편집이 있는지
+let C = CONFIG;
+
+function deepMerge(base, over) {
+  if (Array.isArray(over)) return over;
+  if (over && typeof over === "object") {
+    for (const k in over) base[k] = deepMerge(base[k] ?? (Array.isArray(over[k]) ? [] : {}), over[k]);
+    return base;
+  }
+  return over === undefined ? base : over;
+}
+const get = (p) => p.split(".").reduce((o, k) => (o == null ? o : o[k]), C);
+const set = (p, v) => {
+  const ks = p.split("."); let o = C;
+  for (let i = 0; i < ks.length - 1; i++) o = o[ks[i]];
+  o[ks[ks.length - 1]] = v;
+};
+const esc = (s) => String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+const $ = (s) => document.querySelector(s);
+
+/* ============================================================
+   2) 렌더링
+   ============================================================ */
+const ICONS = {
+  user: '<svg viewBox="0 0 24 24" fill="none" stroke="#0b2247" stroke-width="1.7"><circle cx="12" cy="8" r="3.4"/><path d="M4.6 20c1.4-3.6 4.1-5.4 7.4-5.4s6 1.8 7.4 5.4"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="#0b2247" stroke-width="1.8"><path d="M4 20h16" stroke-linecap="round"/><rect x="6" y="12" width="3.2" height="6" rx="1"/><rect x="11" y="8" width="3.2" height="10" rx="1"/><rect x="16" y="4.5" width="3.2" height="13.5" rx="1"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="#0b2247" stroke-width="1.7"><rect x="4.5" y="3" width="15" height="18" rx="2.4"/><path d="M8.5 9h7M8.5 13h4" stroke-linecap="round"/><circle cx="16.5" cy="16" r="3.2" fill="#fff"/><path d="M15 16.1l1.1 1.1 2-2.2" stroke-linecap="round"/></svg>'
+};
+const CHK = '<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+
+function govMark(key) {
+  if (key === "fine") return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e8f7ec"/><circle cx="12" cy="12" r="10" fill="none" stroke="#22a04a" stroke-width="1.6"/><path d="M2.4 12h19.2M12 2.2c2.6 2.8 3.9 6.2 3.9 9.8S14.6 18.9 12 21.8C9.4 18.9 8.1 15.6 8.1 12S9.4 5 12 2.2z" fill="none" stroke="#22a04a" stroke-width="1.3"/></svg>';
+  if (key === "fsc") return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#f4f7fc" stroke="#0b2247" stroke-width="1.4"/><path d="M7.5 12a4.5 4.5 0 019 0 4.5 4.5 0 01-9 0z" fill="#c8384a"/><path d="M12 7.5a4.5 4.5 0 010 9 4.5 4.5 0 000-9z" fill="#1d3f8f"/></svg>';
+  return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#eaf1fb" stroke="#1e6fc4" stroke-width="1.5"/><path d="M2.6 12h18.8M12 2.3c2.5 2.8 3.8 6.1 3.8 9.7s-1.3 6.9-3.8 9.7C9.5 18.9 8.2 15.6 8.2 12S9.5 5.1 12 2.3z" fill="none" stroke="#1e6fc4" stroke-width="1.2"/></svg>';
+}
+
+function render() {
+  /* 텍스트 바인딩 */
+  document.querySelectorAll("[data-k]").forEach((el) => {
+    const v = get(el.dataset.k);
+    if (v !== undefined && v !== null) el.textContent = v;
+  });
+
+  /* 기관 로고 링크 */
+  $("#govLinks").innerHTML = C.topLinks.map((g, i) => `
+    ${i > 0 ? '<span class="gov-div"></span>' : ""}
+    <a href="${esc(g.url)}" target="_blank" rel="noopener noreferrer" title="${esc(g.name)} 홈페이지">
+      ${g.img ? `<img src="${esc(g.img)}" alt="${esc(g.name)}">` : govMark(g.key)}
+      <span>
+        <span class="gnm" data-k="topLinks.${i}.name">${esc(g.name)}</span>
+        ${g.sub ? `<span class="gsub" data-k="topLinks.${i}.sub">${esc(g.sub)}</span>` : ""}
+      </span>
+    </a>`).join("") + `<span class="gov-div"></span><span class="hd-badge" data-k="brand.badge">${esc(C.brand.badge)}</span>`;
+
+  /* 히어로 특징 3개 */
+  $("#heroFeats").innerHTML = C.hero.features.map((f, i) => `
+    <div class="h-feat">
+      <span class="h-ico">${ICONS[f.icon] || ICONS.check}</span>
+      <span>
+        <span class="t1" data-k="hero.features.${i}.t1">${esc(f.t1)}</span><br>
+        <span class="t2" data-k="hero.features.${i}.t2">${esc(f.t2)}</span>
+      </span>
+    </div>`).join("");
+
+  /* 투자경험 셀렉트 */
+  $("#f-exp").innerHTML = `<option value="">${esc(C.form.expPlaceholder)}</option>` +
+    C.form.experiences.map((e) => `<option value="${esc(e)}">${esc(e)}</option>`).join("");
+  $("#f-name").placeholder = C.form.namePlaceholder;
+  $("#f-phone").placeholder = C.form.phonePlaceholder;
+  $("#consentMore").href = C.form.consentMoreUrl || "#";
+
+  /* 관심분야 체크박스 */
+  $("#interestBox").innerHTML = C.form.interests.map((t, i) => `
+    <label class="chk">
+      <input type="checkbox" class="it" value="${esc(t)}">
+      <span class="box">${CHK}</span>
+      <span data-k="form.interests.${i}">${esc(t)}</span>
+    </label>`).join("");
+
+  /* 신뢰 섹션 버튼 2개 */
+  $("#trustBtns").innerHTML = C.trust.buttons.map((b, i) => `
+    <a class="t-btn ${b.style === "gold" ? "gold" : "line"}" href="${esc(b.url)}" target="_blank" rel="noopener noreferrer">
+      <span data-k="trust.buttons.${i}.label">${esc(b.label)}</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+    </a>`).join("");
+
+  /* FINE 카드 표 */
+  $("#fineRows").innerHTML = C.trust.card.rows.map((r, i) => `
+    <div class="fine-tr">
+      <div class="k" data-k="trust.card.rows.${i}.k">${esc(r.k)}</div>
+      <div class="v" data-k="trust.card.rows.${i}.v">${esc(r.v)}</div>
+    </div>`).join("");
+
+  /* 푸터 */
+  $("#ftMenu").innerHTML = C.footer.menus.map((m, i) =>
+    `<a href="${esc(m.url)}" data-k="footer.menus.${i}.label">${esc(m.label)}</a>`).join("");
+  $("#ftNote").innerHTML = C.footer.disclaimer.map((d, i) =>
+    `<span data-k="footer.disclaimer.${i}">${esc(d)}</span>`).join("<br>");
+  $("#ftCo").innerHTML = C.footer.company.map((d, i) =>
+    `<span data-k="footer.company.${i}">${esc(d)}</span>`).join("<br>") +
+    `<br><span data-k="footer.copyright">${esc(C.footer.copyright)}</span>`;
+
+  $("#mcta").style.display = C.mobileCta.enabled ? "" : "none";
+  if (editing) enableEditing(true);
+}
+render();
+
+/* 서버에 저장된 문구가 있으면 덮어쓰기 (관리자가 편집·반영한 내용) */
+(async () => {
+  try {
+    const r = await fetch("/api/content", { cache: "no-store" });
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d && typeof d === "object" && Object.keys(d).length) {
+      C = deepMerge(JSON.parse(JSON.stringify(DEFAULTS)), d);
+      render();
+      if (editing) syncJson();
+    }
+  } catch (e) { /* 실패해도 기본 문구로 정상 노출 */ }
+})();
+
+/* ============================================================
+   3) 폼 동작
+   ============================================================ */
+const toast = (msg, err) => {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast on" + (err ? " err" : "");
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => (t.className = "toast"), 3200);
+};
+
+$("#f-phone").addEventListener("input", (e) => {
+  const d = e.target.value.replace(/\D/g, "").slice(0, 11);
+  e.target.value = d.length < 4 ? d
+    : d.length < 8 ? d.slice(0, 3) + "-" + d.slice(3)
+    : d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7);
+});
+$("#f-exp").addEventListener("change", (e) => e.target.classList.toggle("filled", !!e.target.value));
+
+$("#leadForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (editing) return toast("편집 모드에서는 신청이 동작하지 않습니다.", true);
+  if (e.target.website.value) return;                       // 허니팟
+
+  const name = $("#f-name").value.trim();
+  const phone = $("#f-phone").value.replace(/\D/g, "");
+  const exp = $("#f-exp").value;
+  const interests = [...document.querySelectorAll(".it:checked")].map((i) => i.value);
+
+  if (name.length < 2) return toast("성함을 정확히 입력해 주세요.", true);
+  if (!/^01[0-9]\d{7,8}$/.test(phone)) return toast("연락처를 정확히 입력해 주세요.", true);
+  if (!$("#c1").checked || !$("#c2").checked) return toast("필수 동의 항목에 체크해 주세요.", true);
+
+  const payload = { name, phone, experience: exp, interest: interests.join(", "), interests };
+
+  if (!C.form.endpoint) { toast(C.form.demoMsg); console.log("[상담신청 데이터]", payload); return; }
+  try {
+    const r = await fetch(C.form.endpoint, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) return toast(d.error || "신청에 실패했습니다. 잠시 후 다시 시도해 주세요.", true);
+    toast(C.form.successMsg);
+    e.target.reset();
+    $("#f-exp").classList.remove("filled");
+  } catch (err) { toast("네트워크 오류입니다. 잠시 후 다시 시도해 주세요.", true); }
+});
+
+$("#mcta").addEventListener("click", () => {
+  document.getElementById("apply").scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => $("#f-name").focus({ preventScroll: true }), 500);
+});
+
+/* ============================================================
+   4) 편집 모드 — 관리자 인증 후에만 사용 가능
+      들어가는 법: 주소 뒤에 ?edit=1 을 붙이고 관리자 비밀번호 입력
+      예) https://내사이트.netlify.app/?edit=1
+      (일반 방문자에게는 편집 버튼이 아예 보이지 않습니다)
+      고친 내용은 "사이트에 반영"을 눌러야 모든 방문자에게 적용됩니다.
+   ============================================================ */
+const ADMIN_TOKEN_KEY = "hodu_token";   // 관리자 페이지(/admin)와 동일한 세션 키
+const save = () => { dirty = true; markDirty(); };
+
+function markDirty() {
+  const b = $("#btnPublish");
+  if (!b) return;
+  b.textContent = dirty ? "● 사이트에 반영" : "사이트에 반영";
+  b.style.opacity = dirty ? "1" : ".6";
+}
+
+async function tokenValid(t) {
+  if (!t) return false;
+  try {
+    const r = await fetch("/api/admin/me", { headers: { Authorization: "Bearer " + t } });
+    return r.ok;
+  } catch (e) { return false; }
+}
+
+function showGate() {
+  const g = document.createElement("div");
+  g.className = "gate";
+  g.innerHTML = `
+    <div class="gate-box">
+      <h3>관리자 확인</h3>
+      <p>랜딩페이지 내용을 편집하려면 관리자 비밀번호를 입력해 주세요.</p>
+      <input type="password" id="gatePw" autocomplete="current-password" placeholder="관리자 비밀번호">
+      <p class="err" id="gateErr"></p>
+      <div class="gate-acts">
+        <button type="button" id="gateCancel">취소</button>
+        <button type="button" class="pri" id="gateOk">확인</button>
+      </div>
+    </div>`;
+  document.body.appendChild(g);
+  const err = (m) => { const e = $("#gateErr"); e.textContent = m; e.style.display = "block"; };
+  const tryLogin = async () => {
+    const pw = $("#gatePw").value;
+    if (!pw) return err("비밀번호를 입력해 주세요.");
+    try {
+      const r = await fetch("/api/admin/login", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pw })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.token) return err(d.error || "비밀번호가 일치하지 않습니다.");
+      sessionStorage.setItem(ADMIN_TOKEN_KEY, d.token);
+      g.remove();
+      openEditor();
+    } catch (e) { err("서버에 연결할 수 없습니다."); }
+  };
+  $("#gateOk").onclick = tryLogin;
+  $("#gatePw").onkeydown = (e) => { if (e.key === "Enter") tryLogin(); };
+  $("#gateCancel").onclick = () => { g.remove(); history.replaceState(null, "", location.pathname); };
+  setTimeout(() => $("#gatePw").focus(), 60);
+}
+
+async function adminGate() {
+  const want = new URLSearchParams(location.search).get("edit") === "1" || location.hash === "#edit";
+  if (!want) return;                                   // 일반 방문 → 편집 UI 없음
+  if (await tokenValid(sessionStorage.getItem(ADMIN_TOKEN_KEY))) openEditor();
+  else showGate();
+}
+
+function openEditor() {
+  document.body.classList.add("admin");
+  buildUrlFields(); syncJson(); markDirty();
+  toast("관리자 모드입니다. 우측 하단 버튼으로 편집하세요.");
+}
+adminGate();
+
+function enableEditing(on) {
+  document.body.classList.toggle("editing", on);
+  document.querySelectorAll("[data-k]").forEach((el) => {
+    if (on) {
+      el.setAttribute("contenteditable", "plaintext-only");
+      el.oninput = () => { set(el.dataset.k, el.textContent); save(); syncJson(); };
+    } else {
+      el.removeAttribute("contenteditable");
+      el.oninput = null;
+    }
+  });
+}
+
+function urlList() {
+  const out = [];
+  (function walk(o, p) {
+    for (const k in o) {
+      const v = o[k], path = p ? p + "." + k : k;
+      if (v && typeof v === "object") walk(v, path);
+      else if (typeof v === "string" && (k === "url" || k === "consentMoreUrl" || k === "endpoint")) out.push([path, v]);
+    }
+  })(C, "");
+  return out;
+}
+function buildUrlFields() {
+  const labelFor = (p) => {
+    const m = p.match(/^topLinks\.(\d+)\.url$/); if (m) return C.topLinks[m[1]].name + " 링크";
+    const b = p.match(/^trust\.buttons\.(\d+)\.url$/); if (b) return C.trust.buttons[b[1]].label + " 링크";
+    const f = p.match(/^footer\.menus\.(\d+)\.url$/); if (f) return "푸터 · " + C.footer.menus[f[1]].label;
+    if (p === "form.consentMoreUrl") return "개인정보 자세히 보기 링크";
+    if (p === "form.endpoint") return "상담신청 전송 주소 (비우면 전송 안 함)";
+    return p;
+  };
+  $("#urlFields").innerHTML = urlList().map(([p, v]) =>
+    `<label>${esc(labelFor(p))}</label><input data-url="${esc(p)}" value="${esc(v)}">`).join("");
+  $("#urlFields").querySelectorAll("input").forEach((inp) => {
+    inp.addEventListener("change", () => { set(inp.dataset.url, inp.value.trim()); save(); render(); syncJson(); buildUrlFields(); });
+  });
+}
+const syncJson = () => { $("#jsonBox").value = JSON.stringify(C, null, 2); };
+
+$("#edFab").addEventListener("click", () => {
+  editing = !editing;
+  $("#edFab").classList.toggle("on", editing);
+  $("#edFab").textContent = editing ? "✓ 편집 종료" : "✏ 내용편집";
+  $("#edPanel").classList.toggle("on", editing);
+  if (editing) { buildUrlFields(); syncJson(); }
+  enableEditing(editing);
+});
+
+$("#btnApplyJson").addEventListener("click", () => {
+  try {
+    C = deepMerge(JSON.parse(JSON.stringify(DEFAULTS)), JSON.parse($("#jsonBox").value));
+    save(); render(); buildUrlFields(); toast("화면에 적용했습니다. [사이트에 반영]을 눌러 저장하세요.");
+  } catch (e) { toast("JSON 형식이 올바르지 않습니다.", true); }
+});
+
+/* 서버에 저장 → 모든 방문자에게 즉시 적용 */
+$("#btnPublish").addEventListener("click", async () => {
+  const t = sessionStorage.getItem(ADMIN_TOKEN_KEY) || "";
+  try {
+    const r = await fetch("/api/content", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + t },
+      body: JSON.stringify(C)
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 401) return toast("로그인이 만료되었습니다. 새로고침 후 다시 로그인해 주세요.", true);
+    if (!r.ok) return toast(d.error || "저장에 실패했습니다.", true);
+    dirty = false; markDirty();
+    toast("사이트에 반영되었습니다. (" + (d.savedAt || "") + ")");
+  } catch (e) { toast("서버에 연결할 수 없습니다.", true); }
+});
+
+$("#btnCopy").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(JSON.stringify(C, null, 2)); toast("JSON을 복사했습니다."); }
+  catch (e) { $("#jsonBox").select(); toast("복사 실패 — 직접 선택해 복사해 주세요.", true); }
+});
+
+/* 편집 결과가 CONFIG에 반영된 완성 HTML 파일 내려받기 */
+$("#btnSaveHtml").addEventListener("click", () => {
+  /* 편집 흔적(관리자 모드 클래스·contenteditable)을 뺀 깨끗한 사본을 만든다 */
+  const bodyCls = document.body.className;
+  document.body.className = "";
+  document.querySelectorAll("[data-k]").forEach((el) => el.removeAttribute("contenteditable"));
+  const src = document.documentElement.outerHTML;
+  document.body.className = bodyCls;
+  if (editing) enableEditing(true);
+
+  const start = src.indexOf("const CONFIG = {");
+  const end = src.indexOf("\n};", start);
+  if (start < 0 || end < 0) return toast("저장에 실패했습니다.", true);
+  const out = src.slice(0, start) + "const CONFIG = " + JSON.stringify(C, null, 2) + ";" + src.slice(end + 3);
+  const blob = new Blob(["<!DOCTYPE html>\n" + out], { type: "text/html;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "hodu.html";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  toast("hodu.html 파일로 저장했습니다.");
+});
+
+$("#btnReset").addEventListener("click", () => {
+  if (!confirm("페이지 기본 문구로 되돌릴까요?\n(되돌린 뒤 [사이트에 반영]을 눌러야 실제로 적용됩니다)")) return;
+  C = JSON.parse(JSON.stringify(DEFAULTS));
+  save(); render(); buildUrlFields(); syncJson();
+  toast("기본 문구로 되돌렸습니다. [사이트에 반영]을 눌러 저장하세요.");
+});
+
+/* 반영하지 않은 편집이 있으면 이탈 경고 */
+addEventListener("beforeunload", (e) => { if (editing && dirty) { e.preventDefault(); e.returnValue = ""; } });
+</script>
+</body>
+</html>

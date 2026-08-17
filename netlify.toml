@@ -1,0 +1,31 @@
+# ── 호두인베스트 랜딩페이지 · Netlify 설정 ───────────────────────────
+# 정적 파일은 public/ , 서버 기능(API)은 netlify/functions/ 에 있습니다.
+
+[build]
+  publish  = "public"
+  command  = "npm install --omit=dev"      # 함수용 패키지(@netlify/blobs) 설치
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# 어드민 페이지 주소를 /admin 으로도 열 수 있게
+[[redirects]]
+  from = "/admin"
+  to   = "/admin.html"
+  status = 200
+
+# 기본 보안 헤더
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+# 어드민 페이지는 캐시/색인 금지
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag  = "noindex, nofollow"

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>호두인베스트 · 관리자</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{--bg:#070f22;--panel:#0e1830;--line:rgba(140,175,235,.18);
+    --gold:#c8a24a;--gold2:#e0c073;--text:#eaf1ff;--muted:#8fa1c4;--ok:#39d98a;--bad:#ff8a97}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Pretendard","Malgun Gothic",system-ui,sans-serif;
+    background:radial-gradient(80% 60% at 50% -10%,rgba(200,162,74,.14),transparent 60%),var(--bg);
+    color:var(--text);min-height:100vh;line-height:1.55}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:9px;cursor:pointer;font-weight:800;
+    font-size:.9rem;padding:11px 18px;color:#1b1405;background:linear-gradient(135deg,var(--gold2),var(--gold));transition:.16s}
+  .btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+  .btn.sec{background:#182446;color:#cfdcf5;border:1px solid var(--line)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:#cfdcf5}
+  .btn.danger{background:#3a1320;color:#ff9aa6;border:1px solid rgba(255,90,110,.4)}
+  .btn.sm{padding:7px 12px;font-size:.8rem}
+  input{font-family:inherit;font-size:.95rem;padding:12px 14px;border-radius:9px;border:1px solid var(--line);
+    background:#0a1430;color:#fff;outline:none;width:100%}
+  input:focus{border-color:var(--gold)}
+  label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:6px;font-weight:600}
+
+  #login{max-width:380px;margin:13vh auto 0;padding:30px;background:var(--panel);border:1px solid var(--line);
+    border-radius:16px;box-shadow:0 30px 70px -30px #000}
+  #login h1{font-size:1.25rem;margin-bottom:4px}
+  #login p{color:var(--muted);font-size:.85rem;margin-bottom:20px}
+  #login .btn{width:100%;justify-content:center;margin-top:14px;padding:13px}
+  .err{color:var(--bad);font-size:.85rem;margin-top:10px;min-height:1.2em;text-align:center}
+
+  #app{display:none}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+  .top h1{font-size:1.3rem;display:flex;align-items:center;gap:10px}
+  .top .mk{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#1b1405;font-weight:900;
+    background:linear-gradient(135deg,var(--gold2),var(--gold))}
+  .top .right{display:flex;gap:8px;flex-wrap:wrap}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .kpi .n{font-size:1.7rem;font-weight:900}
+  .kpi .l{color:var(--muted);font-size:.82rem;margin-top:2px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}
+  .tbl-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .tbl-head h2{font-size:1.05rem}
+  .search{max-width:220px}
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th,td{padding:11px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+  th{color:var(--muted);font-size:.76rem;font-weight:700;white-space:nowrap}
+  tbody tr:hover{background:rgba(200,162,74,.06)}
+  td.phone{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+  .pill{display:inline-block;font-size:.74rem;font-weight:700;padding:3px 9px;border-radius:999px;margin:1px 2px 1px 0;
+    background:rgba(200,162,74,.14);color:var(--gold2);border:1px solid rgba(200,162,74,.32)}
+  .pill.exp{background:rgba(90,160,255,.13);color:#9cc4ff;border-color:rgba(90,160,255,.3)}
+  .empty{text-align:center;color:var(--muted);padding:40px 0}
+  .muted{color:var(--muted);font-size:.82rem}
+  .loc{color:#bcd0f5;font-weight:700;font-size:.84rem;white-space:nowrap}
+  .note{font-size:.82rem;color:var(--muted);line-height:1.7}
+  @media(max-width:820px){.cards{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){
+    .cards{grid-template-columns:1fr 1fr;gap:8px}
+    .kpi{padding:13px 14px}.kpi .n{font-size:1.4rem}
+    .search{max-width:100%}
+    .top h1{font-size:1.1rem}
+    th,td{padding:9px 6px;font-size:.84rem}
+  }
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h1>🔒 관리자 로그인</h1>
+  <p>호두인베스트 상담 관리 시스템</p>
+  <label for="pw">비밀번호</label>
+  <input id="pw" type="password" placeholder="비밀번호를 입력하세요" autocomplete="current-password">
+  <button class="btn" id="loginBtn">로그인</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<div id="app"><div class="wrap">
+  <div class="top">
+    <h1><span class="mk">H</span> 호두인베스트 관리자</h1>
+    <div class="right">
+      <a class="btn ghost" id="editLink" href="/?edit=1" target="_blank">랜딩 문구 편집</a>
+      <button class="btn sec" id="refreshBtn">새로고침</button>
+      <button class="btn sec" id="logoutBtn">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="kpi"><div class="n" id="kTotal">0</div><div class="l">총 상담신청</div></div>
+    <div class="kpi"><div class="n" id="kToday">0</div><div class="l">오늘 신청</div></div>
+    <div class="kpi"><div class="n" id="kWeek">0</div><div class="l">최근 7일</div></div>
+    <div class="kpi"><div class="n" id="kTop">-</div><div class="l">최다 관심분야</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="tbl-head">
+      <div><h2>상담신청 고객 명단</h2><div class="muted" id="listCount"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input class="search" id="search" placeholder="이름·연락처·관심분야 검색">
+        <button class="btn sec" id="csvBtn">CSV 내보내기</button>
+        <button class="btn danger" id="delSelBtn">선택 삭제 <span id="selCount"></span></button>
+        <button class="btn danger" id="clearBtn">전체 삭제</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th style="width:34px;text-align:center"><input type="checkbox" id="selAll" title="전체 선택" style="width:auto"></th>
+          <th>등록일시</th><th>이름</th><th>연락처</th><th>투자경험</th><th>관심분야</th><th>위치</th><th></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="empty" style="display:none">아직 접수된 상담신청이 없습니다.</div>
+  </div>
+
+  <div class="panel">
+    <div class="note">
+      · 데이터는 <b>Netlify Blobs</b>에 저장되어 재배포·재시작에도 유지됩니다.<br>
+      · 비밀번호 변경은 <b>Netlify 대시보드 → Site configuration → Environment variables → ADMIN_PASSWORD</b> 에서 수정 후 재배포하세요.<br>
+      · 로그인 세션은 12시간 뒤 만료됩니다.
+    </div>
+  </div>
+</div></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const TOKEN_KEY = "hodu_token";
+let TOKEN = sessionStorage.getItem(TOKEN_KEY) || "";
+let ALL = [];
+
+const headers = () => ({ "Content-Type": "application/json", Authorization: "Bearer " + TOKEN });
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmtPhone = (p) => {
+  p = String(p || "").replace(/\D/g, "");
+  if (p.length === 11) return p.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+  if (p.length === 10) return p.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+  return p;
+};
+
+/* ---- 로그인 ---- */
+async function doLogin() {
+  $("#loginErr").textContent = "";
+  try {
+    const r = await fetch("/api/admin/login", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: $("#pw").value })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.token) { $("#loginErr").textContent = d.error || "로그인에 실패했습니다."; return; }
+    TOKEN = d.token;
+    sessionStorage.setItem(TOKEN_KEY, TOKEN);
+    enterApp();
+  } catch (e) { $("#loginErr").textContent = "서버에 연결할 수 없습니다."; }
+}
+$("#loginBtn").onclick = doLogin;
+$("#pw").addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+
+function enterApp() { $("#login").style.display = "none"; $("#app").style.display = "block"; load(); }
+function logout() { TOKEN = ""; sessionStorage.removeItem(TOKEN_KEY); location.reload(); }
+$("#logoutBtn").onclick = logout;
+$("#refreshBtn").onclick = () => load();
+
+/* ---- 데이터 ---- */
+async function load() {
+  try {
+    const r = await fetch("/api/admin/leads", { headers: headers() });
+    if (r.status === 401) return logout();
+    const d = await r.json();
+    ALL = d.leads || [];
+    renderKpi(); render();
+  } catch (e) { alert("데이터를 불러오지 못했습니다."); }
+}
+
+function renderKpi() {
+  $("#kTotal").textContent = ALL.length.toLocaleString();
+  const kstNow = new Date(Date.now() + 9 * 3600e3);
+  const today = kstNow.toISOString().slice(0, 10);
+  const weekAgo = new Date(kstNow.getTime() - 6 * 864e5).toISOString().slice(0, 10);
+  $("#kToday").textContent = ALL.filter((r) => (r.createdAt || "").slice(0, 10) === today).length;
+  $("#kWeek").textContent = ALL.filter((r) => (r.createdAt || "").slice(0, 10) >= weekAgo).length;
+  const cnt = {};
+  ALL.forEach((r) => (r.interests || []).forEach((i) => (cnt[i] = (cnt[i] || 0) + 1)));
+  const top = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0];
+  $("#kTop").textContent = top ? top[0] : "-";
+}
+
+function render() {
+  const q = $("#search").value.trim();
+  const rows = ALL.filter((r) => !q ||
+    (r.name || "").includes(q) || (r.phone || "").includes(q) || (r.interest || "").includes(q));
+  const tb = $("#rows"); tb.innerHTML = "";
+  $("#listCount").textContent = "총 " + ALL.length + "건" + (q ? " · 검색 " + rows.length + "건" : "");
+  $("#empty").style.display = rows.length ? "none" : "block";
+  rows.forEach((r) => {
+    const loc = [r.country, r.region, r.city].filter(Boolean).join(" ");
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td style="text-align:center"><input type="checkbox" class="selrow" data-id="${esc(r.id)}" style="width:auto"></td>
+      <td class="muted">${esc(r.createdAt)}</td>
+      <td><b>${esc(r.name)}</b></td>
+      <td class="phone">${esc(fmtPhone(r.phone))}</td>
+      <td>${r.experience ? '<span class="pill exp">' + esc(r.experience) + "</span>" : '<span class="muted">-</span>'}</td>
+      <td>${(r.interests && r.interests.length) ? r.interests.map((i) => '<span class="pill">' + esc(i) + "</span>").join("") : '<span class="muted">-</span>'}</td>
+      <td>${loc ? '<span class="loc">📍 ' + esc(loc) + "</span>" : '<span class="muted">-</span>'}</td>
+      <td style="text-align:right"><button class="btn danger sm" data-del="${esc(r.id)}">삭제</button></td>`;
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll("[data-del]").forEach((b) => (b.onclick = () => del([b.dataset.del])));
+  tb.querySelectorAll(".selrow").forEach((c) => (c.onchange = updateSel));
+  $("#selAll").checked = false;
+  updateSel();
+}
+$("#search").addEventListener("input", render);
+
+const checkedIds = () => [...document.querySelectorAll(".selrow:checked")].map((c) => c.dataset.id);
+function updateSel() {
+  const n = checkedIds().length, all = document.querySelectorAll(".selrow").length;
+  $("#selCount").textContent = n ? "(" + n + ")" : "";
+  $("#delSelBtn").style.opacity = n ? "1" : ".55";
+  $("#selAll").checked = all > 0 && n === all;
+}
+$("#selAll").onchange = (e) => {
+  document.querySelectorAll(".selrow").forEach((c) => (c.checked = e.target.checked));
+  updateSel();
+};
+
+async function del(ids) {
+  if (!ids.length) return alert("삭제할 항목을 체크해 주세요.");
+  if (!confirm(ids.length + "건을 삭제할까요? 되돌릴 수 없습니다.")) return;
+  const r = await fetch("/api/admin/delete", { method: "POST", headers: headers(), body: JSON.stringify({ ids }) });
+  if (r.status === 401) return logout();
+  if (!r.ok) return alert("삭제에 실패했습니다.");
+  ALL = ALL.filter((x) => !ids.includes(x.id));
+  renderKpi(); render();
+}
+$("#delSelBtn").onclick = () => del(checkedIds());
+
+$("#clearBtn").onclick = async () => {
+  if (!confirm("⚠️ 전체 상담신청을 모두 삭제합니다. 되돌릴 수 없습니다. 계속할까요?")) return;
+  if (!confirm("정말로 전체 삭제하시겠습니까? 한 번 더 확인합니다.")) return;
+  const r = await fetch("/api/admin/clear", { method: "POST", headers: headers() });
+  if (r.status === 401) return logout();
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) return alert("삭제에 실패했습니다.");
+  alert("전체 " + (d.removed || 0) + "건 삭제 완료");
+  load();
+};
+
+$("#csvBtn").onclick = () => window.open("/api/admin/export?token=" + encodeURIComponent(TOKEN), "_blank");
+
+/* 토큰이 남아 있으면 바로 입장 */
+if (TOKEN) {
+  fetch("/api/admin/me", { headers: headers() })
+    .then((r) => { if (r.ok) enterApp(); else { TOKEN = ""; sessionStorage.removeItem(TOKEN_KEY); } })
+    .catch(() => {});
+}
+</script>
+</body>
+</html>
