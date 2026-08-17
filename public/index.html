@@ -432,9 +432,70 @@ body.editing a{pointer-events:none}
   .h-title{font-size:22.5px}
   .interests .chk-wrap{grid-template-columns:1fr 1fr}
 }
+
+/* ==========================================================
+   모바일 2화면 구성 (부드러운 스냅)
+     화면 1 = 헤더 + 무료 투자상담 신청
+     화면 2 = 파인(FINE) 등재 확인
+   ========================================================== */
+@media (max-width:900px){
+  html{scroll-snap-type:y proximity}   /* proximity = 부드러운 스냅(강제 넘김 아님) */
+
+  .scr{
+    scroll-snap-align:start;
+    min-height:100vh;          /* 구형 브라우저 대비 */
+    min-height:100dvh;         /* 주소창 높이 변화 대응 */
+    display:flex;flex-direction:column;
+  }
+  #scr1 .hero{flex:1;display:flex;align-items:center}
+  #scr1 .hero-in{width:100%}
+  .trust.scr{justify-content:center}
+
+  .h-feats{display:none}       /* 요청: 특징 3종 블록 제거 */
+  .mcta{display:none}          /* 폼이 첫 화면에 있으므로 하단 고정바 불필요 */
+  body{padding-bottom:0}
+
+  /* ── 화면 1 : 한 화면에 담기도록 압축, 신청 폼은 크게 ── */
+  .hd-in{padding:8px 16px;gap:7px}
+  .gov a{padding:7px 4px}
+  .hero-in{padding:14px 16px 18px;gap:14px}
+  .h-title{font-size:24px;line-height:1.36}
+  .h-bar{margin:10px 0 0}
+  .h-desc{display:none}        /* 첫 화면을 신청 폼 중심으로 (되살리려면 이 줄 삭제) */
+  .card{padding:18px 15px 20px}
+  .card-hd{margin-bottom:14px;gap:2px}
+  .card-hd h2{font-size:23px}
+  .card-hd .note{font-size:12.5px}
+  .f-row{grid-template-columns:1fr 1fr;margin-bottom:9px}   /* 성함·투자경험 2열 */
+  .f-field input,.f-field select{height:48px;font-size:14.5px;padding-left:40px}
+  .f-field .fi{left:13px;width:16px;height:16px}
+  .interests{margin:10px 0 9px;padding:11px 12px}
+  .interests .lb{margin-bottom:8px}
+  .interests .chk-wrap{gap:8px}
+  .consents{margin:2px 0 12px;gap:7px}
+  .btn-submit{height:58px;font-size:17.5px}
+
+  /* ── 화면 2 : 파인(FINE) 등재 확인 ── */
+  .trust-in{padding:24px 16px;gap:16px}
+  .t-title{font-size:22px}
+  .t-bar{margin:12px 0}
+  .t-badge{font-size:16px;margin-bottom:12px}
+  .t-desc{font-size:13.5px;line-height:1.7}
+  .t-desc + .t-desc{margin-top:10px}
+  .t-btns{margin-top:18px;gap:9px}
+  .t-btn{min-height:50px;font-size:15px}
+  .fine{padding:16px 14px}
+  .fine-hd{padding-bottom:12px}
+  .fine-title{margin:12px 0 6px;padding-bottom:9px}
+  .fine-tr{min-height:38px}
+  .fine-note{display:none}
+}
 </style>
 </head>
 <body>
+
+<!-- ===== 화면 1 : 헤더 + 상담신청 ===== -->
+<div class="scr" id="scr1">
 
 <!-- ===== HEADER ===== -->
 <header class="hd">
@@ -535,8 +596,10 @@ body.editing a{pointer-events:none}
   </div>
 </section>
 
-<!-- ===== TRUST (NAVY) ===== -->
-<section class="trust">
+</div><!-- /화면 1 -->
+
+<!-- ===== 화면 2 : 파인(FINE) 등재 확인 ===== -->
+<section class="trust scr">
   <div class="trust-in">
     <div class="trust-left">
       <h2 class="t-title">
@@ -804,6 +867,14 @@ $("#leadForm").addEventListener("submit", async (e) => {
     e.target.reset();
     $("#f-exp").classList.remove("filled");
   } catch (err) { toast("네트워크 오류입니다. 잠시 후 다시 시도해 주세요.", true); }
+});
+
+/* 폼 입력 중에는 스냅을 잠시 꺼서 키보드가 올라올 때 화면이 튀지 않게 */
+document.addEventListener("focusin", (e) => {
+  if (e.target.closest("#leadForm")) document.documentElement.style.scrollSnapType = "none";
+});
+document.addEventListener("focusout", () => {
+  setTimeout(() => { document.documentElement.style.scrollSnapType = ""; }, 200);
 });
 
 $("#mcta").addEventListener("click", () => {
