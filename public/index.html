@@ -191,7 +191,10 @@ button{font-family:inherit}
 .gov .gnm{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
 .gov .gsub{font-size:10px;color:#8b98ae;display:block;font-weight:500;letter-spacing:-.02em}
 .gov svg{width:22px;height:22px;flex:none}
-.gov img{height:30px;width:auto;max-width:130px;flex:none;object-fit:contain}
+/* 로고는 <img> 대신 배경이미지 박스로 표시한다.
+   flex 안의 <img>는 iOS Safari에서 폭이 0으로 접혀 사라지는 문제가 있다. */
+.gov-logo{display:block;width:104px;height:30px;flex:none;
+  background-repeat:no-repeat;background-position:center;background-size:contain}
 .gov a.has-img{padding:5px 11px}
 .gov-div{width:1px;height:20px;background:var(--line)}
 .hd-badge{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap}
@@ -438,8 +441,8 @@ body.editing a{pointer-events:none}
   .gov a{flex:1 1 0;justify-content:center;padding:8px 4px;border-radius:10px}
   .gov .gnm{font-size:11.5px;letter-spacing:-.04em}
   .gov svg{width:18px;height:18px}
-  .gov img{height:24px;width:auto;max-width:100%}
-  .gov a.has-img{padding:5px 5px}
+  .gov-logo{flex:1 1 auto;width:auto;min-width:0;height:24px}
+  .gov a.has-img{padding:5px 6px}
   .gov-div{display:none}
   .hero-in{padding:32px 16px 40px}
   .h-title{font-size:25px;line-height:1.4}
@@ -846,17 +849,22 @@ function render() {
     ${i > 0 ? '<span class="gov-div"></span>' : ""}
     <a class="${g.img ? "has-img" : ""}" href="${esc(g.url)}" target="_blank" rel="noopener noreferrer" title="${esc(g.name)} 홈페이지">
       ${g.img
-        ? `<img src="${esc(g.img)}" alt="${esc(g.name)}" data-fallback="${i}">`
+        ? `<span class="gov-logo" role="img" aria-label="${esc(g.name)}" data-i="${i}"
+                 style="background-image:url('${esc(g.img)}')"></span>`
         : govMark(g.key) + govText(g, i)}
     </a>`).join("") + `<span class="gov-div"></span><span class="hd-badge" data-k="brand.badge">${esc(C.brand.badge)}</span>`;
 
-  /* 로고 파일이 아직 없으면 기존 임시 도형으로 자동 대체 */
-  $("#govLinks").querySelectorAll("img[data-fallback]").forEach((img) => {
-    img.onerror = () => {
-      const i = +img.dataset.fallback, g = C.topLinks[i], a = img.closest("a");
+  /* 로고 파일이 없으면 기존 임시 도형으로 자동 대체 (배경이미지는 onerror 가 없어 미리 확인) */
+  $("#govLinks").querySelectorAll(".gov-logo[data-i]").forEach((box) => {
+    const i = +box.dataset.i, g = C.topLinks[i];
+    const probe = new Image();
+    probe.onerror = () => {
+      const a = box.closest("a");
+      if (!a) return;
       a.classList.remove("has-img");
       a.innerHTML = govMark(g.key) + govText(g, i);
     };
+    probe.src = g.img;
   });
 
   /* 히어로 특징 3개 */
