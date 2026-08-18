@@ -24,9 +24,11 @@ const CONFIG = {
 
   /* ---------- 요구사항 3) 우측 상단 기관 로고 (클릭 시 홈페이지 이동) ---------- */
   topLinks: [
-    { key: "fine", name: "파 인",     sub: "금융소비자 정보포털", url: "https://fine.fss.or.kr", img: "" },
-    { key: "fsc",  name: "금융위원회", sub: "",                  url: "https://www.fsc.go.kr",  img: "" },
-    { key: "fss",  name: "금융감독원", sub: "",                  url: "https://www.fss.or.kr",  img: "" }
+    /* img 에 실제 로고 파일을 넣으면 그림으로 바뀝니다.
+       파일이 없으면 자동으로 기존 임시 도형이 표시됩니다. */
+    { key: "fine", name: "파 인",     sub: "금융소비자 정보포털", url: "https://fine.fss.or.kr", img: "assets/logo-fine.png" },
+    { key: "fsc",  name: "금융위원회", sub: "",                  url: "https://www.fsc.go.kr",  img: "assets/logo-fsc.png" },
+    { key: "fss",  name: "금융감독원", sub: "",                  url: "https://www.fss.or.kr",  img: "assets/logo-fss.png" }
   ],
 
   /* ---------- 히어로(첫 화면) ---------- */
@@ -56,12 +58,37 @@ const CONFIG = {
     consent1: "개인정보 수집 및 이용에 동의합니다. (필수)",
     consent2: "투자상담을 위한 전화 연락에 동의합니다. (필수)",
     consentMore: "자세히 보기",
-    consentMoreUrl: "#privacy",
     submit: "무료 투자상담 신청하기",
     /* 상담신청 저장 API (Netlify Functions). 비우면 전송하지 않습니다. */
     endpoint: "/api/leads",
     successMsg: "상담 신청이 접수되었습니다. 확인 후 순차적으로 연락드리겠습니다.",
     demoMsg: "[미리보기] 아직 서버가 연결되지 않아 실제 전송은 되지 않았습니다."
+  },
+
+  /* ---------- "자세히 보기" 개인정보 동의 팝업 ---------- */
+  privacy: {
+    title: "개인정보 수집·이용 및 상담 연락 동의",
+    intro: "호두인베스트는 투자상담 신청 및 전화상담 제공을 위해 아래와 같이 개인정보를 수집·이용합니다.",
+    tableHead: ["구분", "내용"],
+    table: [
+      ["수집 항목",      "성명, 연락처, 투자경험, 관심분야"],
+      ["수집·이용 목적", "투자상담 신청 확인 및 전화상담 제공"],
+      ["보유·이용 기간", "전화상담 완료 시까지"],
+      ["파기 시점",      "상담 완료 후 지체 없이 파기"],
+      ["연락 방법",      "신청자가 입력한 연락처를 통한 전화 연락"]
+    ],
+    sections: [
+      {
+        h: "개인정보 보호 및 파기 안내",
+        p: "수집된 개인정보는 투자상담 신청 확인 및 상담 제공을 위한 목적으로만 이용하며, 상담 완료 후 지체 없이 안전하게 파기합니다. 다만, 관계 법령에 따라 보존할 의무가 있는 정보가 발생한 경우에는 해당 법령에서 정한 기간 동안 별도로 보관합니다."
+      },
+      {
+        h: "동의 거부에 관한 안내",
+        p: "귀하는 개인정보 수집·이용 및 전화 연락에 대한 동의를 거부할 권리가 있습니다. 다만, 위 정보는 전화상담 제공을 위한 필수정보이므로 동의를 거부할 경우 투자상담 신청 및 상담 제공이 제한될 수 있습니다."
+      }
+    ],
+    note: "※ 본 동의는 투자상담 신청 및 신청에 따른 전화 연락을 위한 동의이며, 별도의 광고·홍보성 정보 수신 동의를 의미하지 않습니다.",
+    close: "확인"
   },
 
   /* ---------- 신뢰 섹션(남색) ---------- */
@@ -113,7 +140,7 @@ const CONFIG = {
     disclaimer: [
       "투자에는 원금 손실이 발생할 수 있으며, 과거의 운용 성과가 미래의 수익을 보장하지 않습니다.",
       "본 상담은 투자 권유가 아니며, 최종 투자 결정과 그에 따른 책임은 투자 본인에게 있습니다.",
-      "개인정보는 상담 및 안내 목적으로만 이용되며, 동의 철회 시 즉시 파기 또는 삭제됩니다."
+      "수집된 개인정보는 투자상담 이외의 목적으로 이용하지 않으며, 동의 철회 시 즉시 파기합니다."
     ],
     company: [
       "호두인베스트  |  대표자 OOO  |  사업자등록번호 000-00-00000",
@@ -163,7 +190,9 @@ button{font-family:inherit}
 .gov a:hover{border-color:var(--gold);background:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,34,71,.08)}
 .gov .gnm{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
 .gov .gsub{font-size:10px;color:#8b98ae;display:block;font-weight:500;letter-spacing:-.02em}
-.gov img,.gov svg{width:22px;height:22px;flex:none;object-fit:contain}
+.gov svg{width:22px;height:22px;flex:none}
+.gov img{height:22px;width:auto;max-width:110px;flex:none;object-fit:contain}
+.gov a.has-img{padding:5px 12px}
 .gov-div{width:1px;height:20px;background:var(--line)}
 .hd-badge{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap}
 
@@ -185,9 +214,10 @@ button{font-family:inherit}
 .h-title{font-size:44px;font-weight:800;line-height:1.32;letter-spacing:-.035em;color:var(--navy);margin:0}
 .h-bar{width:64px;height:4px;background:var(--gold);border-radius:2px;margin:26px 0 24px}
 .h-desc{font-size:17px;color:#42536f;line-height:1.75;margin:0}
-.h-feats{display:flex;gap:0;margin-top:40px;flex-wrap:wrap}
-.h-feat{display:flex;align-items:center;gap:12px;padding-right:26px}
-.h-feat + .h-feat{border-left:1px solid #cfd8e6;padding-left:26px}
+/* PC: 좌측 칸 폭이 좁아 3개를 가로로 두면 줄이 밀리므로 세로로 정렬 */
+.h-feats{display:grid;grid-template-columns:1fr;gap:14px;margin-top:34px}
+.h-feat{display:flex;align-items:center;gap:13px}
+.h-feat + .h-feat{border-top:1px solid #d7dfec;padding-top:14px}
 .h-ico{width:52px;height:52px;flex:none;border-radius:50%;background:#e3eaf6;display:grid;place-items:center}
 .h-ico svg{width:26px;height:26px}
 .h-feat .t1{font-size:15px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
@@ -296,6 +326,35 @@ button{font-family:inherit}
 }
 .mcta button{width:100%;height:54px;border:0;border-radius:11px;background:var(--navy);color:#fff;font-size:16.5px;font-weight:700}
 
+/* ================= 개인정보 동의 팝업 ================= */
+.pv{position:fixed;inset:0;z-index:110;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(8,26,55,.6)}
+.pv.on{display:flex}
+.pv-box{background:#fff;border-radius:16px;width:100%;max-width:620px;max-height:86vh;display:flex;flex-direction:column;
+  box-shadow:0 30px 70px rgba(0,0,0,.35);overflow:hidden}
+.pv-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:22px 24px 16px;border-bottom:1px solid var(--line)}
+.pv-hd h3{margin:0;font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1.4}
+.pv-x{border:0;background:#f1f4f9;width:34px;height:34px;border-radius:50%;flex:none;cursor:pointer;
+  font-size:18px;color:#5a6a86;line-height:1;display:grid;place-items:center}
+.pv-x:hover{background:#e5eaf3;color:var(--navy)}
+.pv-body{padding:20px 24px 24px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pv-intro{margin:0 0 16px;font-size:14.5px;color:#42536f;line-height:1.7}
+.pv-tb{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:14px}
+.pv-tb th,.pv-tb td{border:1px solid #e2e8f2;padding:11px 13px;text-align:left;line-height:1.6}
+.pv-tb th{background:#f5f8fc;color:var(--navy);font-weight:700;white-space:nowrap;width:34%}
+.pv-tb thead th{text-align:center;width:auto}
+.pv-tb td{color:#3f4d66}
+.pv-sec{margin-bottom:16px}
+.pv-sec h4{margin:0 0 6px;font-size:15px;font-weight:700;color:var(--navy)}
+.pv-sec p{margin:0;font-size:14px;color:#4a5872;line-height:1.75}
+.pv-note{margin:0;padding:13px 15px;background:#f6f8fc;border-radius:9px;font-size:13.5px;color:#5a6a86;line-height:1.7}
+.pv-ft{padding:14px 24px 18px;border-top:1px solid var(--line)}
+.pv-ft button{width:100%;height:50px;border:0;border-radius:10px;background:var(--navy);color:#fff;
+  font-size:16px;font-weight:700;cursor:pointer}
+.pv-ft button:hover{background:#0f2d5c}
+body.pv-open{overflow:hidden}
+
 /* ================= TOAST ================= */
 .toast{
   position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);z-index:100;
@@ -363,8 +422,6 @@ body.editing a{pointer-events:none}
   .h-title{font-size:32px}
   .h-desc{font-size:16px}
   .h-feats{gap:14px}
-  .h-feat{flex:1 1 100%;padding:0}
-  .h-feat + .h-feat{border-left:0;padding-left:0}
   .trust-in{grid-template-columns:1fr;padding:48px 18px;gap:32px}
   .t-title{font-size:27px}
   .wrap{padding:0 18px}
@@ -380,7 +437,9 @@ body.editing a{pointer-events:none}
   .gov{width:100%;justify-content:center;gap:6px}
   .gov a{flex:1 1 0;justify-content:center;padding:8px 4px;border-radius:10px}
   .gov .gnm{font-size:11.5px;letter-spacing:-.04em}
-  .gov img,.gov svg{width:18px;height:18px}
+  .gov svg{width:18px;height:18px}
+  .gov img{height:19px;width:auto;max-width:100%}
+  .gov a.has-img{padding:6px 6px}
   .gov-div{display:none}
   .hero-in{padding:32px 16px 40px}
   .h-title{font-size:25px;line-height:1.4}
@@ -417,6 +476,18 @@ body.editing a{pointer-events:none}
   .fine-tr .k{font-size:13px;padding:0 10px}
   .fine-tr .v{font-size:13.5px;padding:0 12px}
   .fine-note{font-size:11.5px}
+  /* 팝업: 모바일에서는 아래에서 올라오는 시트 형태 */
+  .pv{padding:0;align-items:flex-end}
+  .pv-box{max-width:100%;max-height:92vh;border-radius:16px 16px 0 0}
+  .pv-hd{padding:18px 18px 14px}
+  .pv-hd h3{font-size:16.5px}
+  .pv-body{padding:16px 18px 20px}
+  .pv-intro{font-size:13.5px}
+  .pv-tb{font-size:13px}
+  .pv-tb th,.pv-tb td{padding:9px 10px}
+  .pv-sec p{font-size:13.5px}
+  .pv-note{font-size:12.5px}
+  .pv-ft{padding:12px 18px calc(14px + env(safe-area-inset-bottom))}
   .ft{padding:26px 0 30px}
   .ft-menu{gap:10px 18px}
   .ft-menu a{font-size:13px}
@@ -578,7 +649,7 @@ body.editing a{pointer-events:none}
               <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>
               <span data-k="form.consent1">개인정보 수집 및 이용에 동의합니다. (필수)</span>
             </label>
-            <a class="more" id="consentMore" href="#privacy">
+            <a class="more" id="consentMore" href="#" role="button">
               <span data-k="form.consentMore">자세히 보기</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 5l7 7-7 7"/></svg>
             </a>
@@ -680,6 +751,23 @@ body.editing a{pointer-events:none}
 <!-- 모바일 하단 고정 CTA -->
 <div class="mcta" id="mcta"><button type="button" data-k="mobileCta.label">무료 투자상담 신청하기</button></div>
 
+<!-- 개인정보 수집·이용 동의 팝업 -->
+<div class="pv" id="pvModal" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+  <div class="pv-box">
+    <div class="pv-hd">
+      <h3 id="pvTitle" data-k="privacy.title">개인정보 수집·이용 및 상담 연락 동의</h3>
+      <button class="pv-x" type="button" id="pvClose" aria-label="닫기">✕</button>
+    </div>
+    <div class="pv-body">
+      <p class="pv-intro" data-k="privacy.intro"></p>
+      <table class="pv-tb"><thead id="pvThead"></thead><tbody id="pvTbody"></tbody></table>
+      <div id="pvSections"></div>
+      <p class="pv-note" data-k="privacy.note"></p>
+    </div>
+    <div class="pv-ft"><button type="button" id="pvOk" data-k="privacy.close">확인</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- 편집 모드 UI -->
@@ -748,16 +836,28 @@ function render() {
     if (v !== undefined && v !== null) el.textContent = v;
   });
 
-  /* 기관 로고 링크 */
-  $("#govLinks").innerHTML = C.topLinks.map((g, i) => `
-    ${i > 0 ? '<span class="gov-div"></span>' : ""}
-    <a href="${esc(g.url)}" target="_blank" rel="noopener noreferrer" title="${esc(g.name)} 홈페이지">
-      ${g.img ? `<img src="${esc(g.img)}" alt="${esc(g.name)}">` : govMark(g.key)}
+  /* 기관 로고 링크 — 로고 파일이 있으면 그림, 없으면 임시 도형 + 글자 */
+  const govText = (g, i) => `
       <span>
         <span class="gnm" data-k="topLinks.${i}.name">${esc(g.name)}</span>
         ${g.sub ? `<span class="gsub" data-k="topLinks.${i}.sub">${esc(g.sub)}</span>` : ""}
-      </span>
+      </span>`;
+  $("#govLinks").innerHTML = C.topLinks.map((g, i) => `
+    ${i > 0 ? '<span class="gov-div"></span>' : ""}
+    <a class="${g.img ? "has-img" : ""}" href="${esc(g.url)}" target="_blank" rel="noopener noreferrer" title="${esc(g.name)} 홈페이지">
+      ${g.img
+        ? `<img src="${esc(g.img)}" alt="${esc(g.name)}" data-fallback="${i}">`
+        : govMark(g.key) + govText(g, i)}
     </a>`).join("") + `<span class="gov-div"></span><span class="hd-badge" data-k="brand.badge">${esc(C.brand.badge)}</span>`;
+
+  /* 로고 파일이 아직 없으면 기존 임시 도형으로 자동 대체 */
+  $("#govLinks").querySelectorAll("img[data-fallback]").forEach((img) => {
+    img.onerror = () => {
+      const i = +img.dataset.fallback, g = C.topLinks[i], a = img.closest("a");
+      a.classList.remove("has-img");
+      a.innerHTML = govMark(g.key) + govText(g, i);
+    };
+  });
 
   /* 히어로 특징 3개 */
   $("#heroFeats").innerHTML = C.hero.features.map((f, i) => `
@@ -774,7 +874,21 @@ function render() {
     C.form.experiences.map((e) => `<option value="${esc(e)}">${esc(e)}</option>`).join("");
   $("#f-name").placeholder = C.form.namePlaceholder;
   $("#f-phone").placeholder = C.form.phonePlaceholder;
-  $("#consentMore").href = C.form.consentMoreUrl || "#";
+
+  /* 개인정보 동의 팝업 내용 */
+  const pv = C.privacy;
+  $("#pvThead").innerHTML = `<tr>${pv.tableHead.map((h, i) =>
+    `<th data-k="privacy.tableHead.${i}">${esc(h)}</th>`).join("")}</tr>`;
+  $("#pvTbody").innerHTML = pv.table.map((r, i) => `
+    <tr>
+      <th data-k="privacy.table.${i}.0">${esc(r[0])}</th>
+      <td data-k="privacy.table.${i}.1">${esc(r[1])}</td>
+    </tr>`).join("");
+  $("#pvSections").innerHTML = pv.sections.map((s, i) => `
+    <div class="pv-sec">
+      <h4 data-k="privacy.sections.${i}.h">${esc(s.h)}</h4>
+      <p data-k="privacy.sections.${i}.p">${esc(s.p)}</p>
+    </div>`).join("");
 
   /* 관심분야 체크박스 */
   $("#interestBox").innerHTML = C.form.interests.map((t, i) => `
@@ -873,6 +987,25 @@ $("#leadForm").addEventListener("submit", async (e) => {
     $("#f-exp").classList.remove("filled");
   } catch (err) { toast("네트워크 오류입니다. 잠시 후 다시 시도해 주세요.", true); }
 });
+
+/* ── 개인정보 동의 팝업 열기/닫기 ── */
+const pvModal = $("#pvModal");
+function pvOpen(e) {
+  if (e) e.preventDefault();
+  if (editing) return;                       // 편집 모드에서는 열지 않음
+  pvModal.classList.add("on");
+  document.body.classList.add("pv-open");
+  $("#pvClose").focus({ preventScroll: true });
+}
+function pvHide() {
+  pvModal.classList.remove("on");
+  document.body.classList.remove("pv-open");
+}
+$("#consentMore").addEventListener("click", pvOpen);
+$("#pvClose").addEventListener("click", pvHide);
+$("#pvOk").addEventListener("click", pvHide);
+pvModal.addEventListener("click", (e) => { if (e.target === pvModal) pvHide(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && pvModal.classList.contains("on")) pvHide(); });
 
 /* ── 모바일 화면 넘김(스냅) 강도 조절 ────────────────────────────────
    두 화면이 기기 높이에 다 들어가면 mandatory(한 번 스크롤 = 다음 화면),
@@ -998,7 +1131,7 @@ function urlList() {
     for (const k in o) {
       const v = o[k], path = p ? p + "." + k : k;
       if (v && typeof v === "object") walk(v, path);
-      else if (typeof v === "string" && (k === "url" || k === "consentMoreUrl" || k === "endpoint")) out.push([path, v]);
+      else if (typeof v === "string" && (k === "url" || k === "img" || k === "endpoint")) out.push([path, v]);
     }
   })(C, "");
   return out;
@@ -1008,7 +1141,7 @@ function buildUrlFields() {
     const m = p.match(/^topLinks\.(\d+)\.url$/); if (m) return C.topLinks[m[1]].name + " 링크";
     const b = p.match(/^trust\.buttons\.(\d+)\.url$/); if (b) return C.trust.buttons[b[1]].label + " 링크";
     const f = p.match(/^footer\.menus\.(\d+)\.url$/); if (f) return "푸터 · " + C.footer.menus[f[1]].label;
-    if (p === "form.consentMoreUrl") return "개인정보 자세히 보기 링크";
+    const g = p.match(/^topLinks\.(\d+)\.img$/); if (g) return C.topLinks[g[1]].name + " 로고 파일";
     if (p === "form.endpoint") return "상담신청 전송 주소 (비우면 전송 안 함)";
     return p;
   };
