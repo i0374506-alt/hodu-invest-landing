@@ -115,7 +115,11 @@ const CONFIG = {
         { k: "감독기관",     v: "금융위, 금감원" },
         { k: "허가등록업종", v: "투자자문업" }
       ],
-      note: "※ 금융소비자 정보포털 FINE(파인) 제도권 금융회사 조회 내용"
+      /* 캡처 사진을 넣으면 아래 표 대신 사진으로 표시됩니다.
+         파일이 없으면 자동으로 표가 표시되므로 화면이 비지 않습니다. */
+      image: "assets/fine-check.png",
+      zoomHint: "탭하면 크게 볼 수 있습니다",
+      note: "※ 금융소비자 정보포털 FINE(파인) 제도권 금융회사 조회 화면"
     }
   },
 
@@ -304,6 +308,20 @@ button{font-family:inherit}
 .fine-tr .k{background:#f6f8fc;display:flex;align-items:center;padding:0 18px;font-size:15.5px;font-weight:600;color:#3f4d66}
 .fine-tr .v{display:flex;align-items:center;padding:0 18px;font-size:15.5px;color:var(--ink)}
 .fine-note{font-size:12.5px;color:#98a3b6;margin-top:16px}
+/* FINE 캡처 사진 모드 */
+.fine.is-img{padding:16px}
+.fine-shot{flex:1;display:flex;flex-direction:column;min-height:0}
+.fine-shot button{flex:1;min-height:0;padding:0;border:1px solid #e6ebf3;border-radius:10px;background:#fff;
+  cursor:zoom-in;overflow:hidden;display:block;width:100%}
+.fine-shot img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+.fine-hint{margin-top:10px;font-size:12.5px;color:#8b97ac;text-align:center}
+/* 확대 보기 */
+.zoom{position:fixed;inset:0;z-index:115;display:none;background:rgba(6,18,38,.92);
+  overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pinch-zoom;padding:14px}
+.zoom.on{display:block}
+.zoom img{display:block;margin:0 auto;max-width:100%;background:#fff;border-radius:8px}
+.zoom-x{position:fixed;top:14px;right:14px;z-index:116;width:40px;height:40px;border:0;border-radius:50%;
+  background:rgba(255,255,255,.92);color:#12203a;font-size:18px;cursor:pointer}
 
 /* ================= FOOTER ================= */
 .ft{background:#f7f9fc;border-top:1px solid var(--line);padding:34px 0 40px}
@@ -553,6 +571,9 @@ body.editing a{pointer-events:none}
   .t-btns{margin-top:14px;gap:8px}
   .t-btn{min-height:50px;font-size:15px}
   .fine{padding:14px 13px}
+  /* 사진 비율에 상관없이 화면 2가 한 화면을 넘지 않도록 높이 고정 */
+  .fine.is-img .fine-shot button{max-height:192px}
+  .fine-hint{margin-top:7px;font-size:11.5px}
   .fine-hd{padding-bottom:12px}
   .fine-title{margin:12px 0 6px;padding-bottom:9px}
   .fine-tr{min-height:38px}
@@ -737,6 +758,12 @@ body.editing a{pointer-events:none}
 <!-- 모바일 하단 고정 CTA -->
 <div class="mcta" id="mcta"><button type="button" data-k="mobileCta.label">무료 투자상담 신청하기</button></div>
 
+<!-- FINE 캡처 확대 보기 -->
+<div class="zoom" id="zoomBox">
+  <button class="zoom-x" type="button" id="zoomClose" aria-label="닫기">✕</button>
+  <img id="zoomImg" src="" alt="">
+</div>
+
 <!-- 개인정보 수집·이용 동의 팝업 -->
 <div class="pv" id="pvModal" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
   <div class="pv-box">
@@ -888,12 +915,40 @@ function render() {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
     </a>`).join("");
 
-  /* FINE 카드 표 */
-  $("#fineRows").innerHTML = C.trust.card.rows.map((r, i) => `
+  /* FINE 카드 — 캡처 사진이 있으면 사진, 없으면 표 */
+  const card = C.trust.card;
+  const fineTable = () => `<div class="fine-tb">` + card.rows.map((r, i) => `
     <div class="fine-tr">
       <div class="k" data-k="trust.card.rows.${i}.k">${esc(r.k)}</div>
       <div class="v" data-k="trust.card.rows.${i}.v">${esc(r.v)}</div>
-    </div>`).join("");
+    </div>`).join("") + `</div>`;
+
+  const fineBox = $("#fineRows");
+  const fineCard = document.querySelector(".fine");
+  if (card.image) {
+    fineBox.outerHTML = `
+      <div class="fine-shot" id="fineRows">
+        <button type="button" id="fineZoom" aria-label="크게 보기">
+          <img src="${esc(card.image)}" alt="${esc(card.title)} FINE 조회 화면">
+        </button>
+        <div class="fine-hint" data-k="trust.card.zoomHint">${esc(card.zoomHint || "")}</div>
+      </div>`;
+    fineCard.classList.add("is-img");
+    const shot = document.querySelector("#fineRows img");
+    shot.onerror = () => {                       /* 사진이 없으면 표로 되돌림 */
+      fineCard.classList.remove("is-img");
+      document.querySelector("#fineRows").outerHTML = fineTable().replace('class="fine-tb"', 'class="fine-tb" id="fineRows"');
+    };
+    $("#fineZoom").onclick = () => {
+      $("#zoomImg").src = shot.src;
+      $("#zoomImg").alt = shot.alt;
+      $("#zoomBox").classList.add("on");
+      document.body.classList.add("pv-open");
+    };
+  } else {
+    fineCard.classList.remove("is-img");
+    fineBox.outerHTML = fineTable().replace('class="fine-tb"', 'class="fine-tb" id="fineRows"');
+  }
 
   /* 푸터 */
   $("#ftMenu").innerHTML = C.footer.menus.map((m, i) =>
@@ -984,6 +1039,12 @@ function pvHide() {
   document.body.classList.remove("pv-open");
 }
 $("#consentMore").addEventListener("click", pvOpen);
+
+/* FINE 캡처 확대 보기 닫기 */
+const zoomHide = () => { $("#zoomBox").classList.remove("on"); document.body.classList.remove("pv-open"); };
+$("#zoomClose").addEventListener("click", zoomHide);
+$("#zoomBox").addEventListener("click", (e) => { if (e.target.id !== "zoomImg") zoomHide(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") zoomHide(); });
 $("#pvClose").addEventListener("click", pvHide);
 $("#pvOk").addEventListener("click", pvHide);
 pvModal.addEventListener("click", (e) => { if (e.target === pvModal) pvHide(); });
