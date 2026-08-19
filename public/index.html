@@ -126,10 +126,139 @@ const CONFIG = {
   /* ---------- 모바일 하단 고정 버튼 ---------- */
   mobileCta: { label: "무료 투자상담 신청하기", enabled: true },
 
+  /* ---------- 약관 팝업 (푸터 메뉴에서 열림) ---------- */
+  docs: {
+    terms: {
+          "title": "호두인베스트 서비스이용약관",
+          "effective": "시행일 2021년 12월 30일",
+          "sections": [
+                {
+                      "h": "제1조(목적)",
+                      "p": [
+                            "본 약관은 (주)호두 인베스트(이하 \"회사\"라고 합니다)이 제공하는 투자자문 관련 제반서비스 이용과 관련하여 회원과 \"회사\" 간에 필요한 사항을 규정함을 목적으로 합니다."
+                      ]
+                },
+                {
+                      "h": "제2조(용어의 정의)",
+                      "p": [
+                            "이 약관에서 사용하는 용어의 정의는 다음과 같습니다."
+                      ],
+                      "ol": [
+                            "\"투자자문\"이란 이용자가 사용하는 단말기(PC, 휴대형단말기 등의 각종 유무선 장치를 포함)와 상관없이 회사가 제공하는 자문 서비스와 관련된 제반 서비스 모두를 의미합니다.",
+                            "\"회원\"이란 이 약관에 따라 \"회사\"가 제공하는 \"투자자문\"을 받는 고객을 말합니다."
+                      ]
+                },
+                {
+                      "h": "제3조(자문 서비스의 내용 및 범위)",
+                      "p": [
+                            "회사가 고객에게 제공하는 투자자문서비스의 내용 및 범위는 다음 각 호와 같습니다."
+                      ],
+                      "ol": [
+                            "각 회원의 투자전략 수립 및 자산배분에 관한 자문",
+                            "각 회원의 포트폴리오 구성 및 분석에 관한 자문",
+                            "금융투자상품 투자에 대한 종류, 종목, 수량, 가격, 매매방법, 매매시기 등 종합적인 투자판단 등의 자문",
+                            "국내외 경제동향, 산업 및 자본시장에 관한 조사 및 이와 관련한 간행물 제공",
+                            "그 밖에 투자전략과 관련한 고객의 요청 자료제공"
+                      ]
+                },
+                {
+                      "h": "제4조(약관의 게시와 개정)",
+                      "ol": [
+                            "\"회사\"는 이 약관의 내용을 \"회원\"이 쉽게 확인할 수 있도록 \"서비스\" 내 또는 회사 홈페이지 등을 통하여 게시합니다.",
+                            "\"회사\"는 필요한 경우 관련 법령을 위배하지 않는 범위에서 이 약관을 개정할 수 있습니다.",
+                            "\"회사\"가 이 약관을 개정할 경우에는 전자금융감독규정 제40조 제4항에 따라 개정내용과 적용일자를 명시하여, 적용일자 14일 전부터 적용일자 전일까지 공지하고 이용자에게 통지하여야 합니다."
+                      ]
+                },
+                {
+                      "h": "제5조(약관의 해석)",
+                      "p": [
+                            "\"회사\"는 이 약관 외에 별도의 운영정책을 둘 수 있습니다.",
+                            "이 약관에서 정하지 아니한 사항이나 해석에 대해서는 회사의 운영정책, 이용안내, 기본약관 및 관련법령 등에 따릅니다."
+                      ]
+                },
+                {
+                      "h": "제6조(개인정보의 보호)",
+                      "p": [
+                            "\"회사\"는 「신용정보의 이용 및 보호에 관한 법률」, 「개인정보보호법」, 「정보통신망 이용촉진 및 정보보호에 관한 법률」 등 관련 법령이 정하는 바에 따라 \"회원\"의 개인정보를 보호하기 위해 노력합니다. 개인정보의 보호 및 이용에 대해서는 관련 법령 및 \"회사\"의 '개인정보 처리방침'이 적용됩니다."
+                      ]
+                },
+                {
+                      "h": "제7조(회사의 의무)",
+                      "ol": [
+                            "\"회사\"는 관련 법령과 이 약관을 준수하며, 계속적이고 안정적으로 \"투자자문\"을 제공하기 위하여 최선을 다하여 노력합니다.",
+                            "\"회사\"는 \"회원\"들의 개인정보(신용정보 포함)보호를 위해 보안시스템을 갖추며, 개인정보처리방침을 공시하고 준수합니다.",
+                            "\"회사\"는 \"회원\"으로부터 제기된 의견이나 불만이 정당하다고 인정할 경우에는 이를 처리하여야 하며, 전자우편 등을 통하여 \"회원\"에게 처리과정 및 결과를 전달할 수 있습니다."
+                      ]
+                },
+                {
+                      "h": "제8조(회원의 의무)",
+                      "p": [
+                            "① \"회원\"은 아래의 행위를 하여서는 안 됩니다."
+                      ],
+                      "ol": [
+                            "타인의 정보도용",
+                            "\"회사\"가 게시한 정보의 변경",
+                            "\"회사\"와 기타 제3자의 저작권 등 지적재산권에 대한 침해",
+                            "\"회사\" 및 기타 제3자의 명예를 손상시키거나 업무를 방해하는 행위",
+                            "\"회사\"가 보유한 비공개 정보를 부정한 방법으로 탈취하거나 수집하는 행위",
+                            "기타 불법적이거나 부당한 행위",
+                            "\"회원\"은 관계 법령, 이용안내, 호두인베스트 투자자문에 관한 기본약관 및 본 약관 등과 관련하여 공지하거나 통지한 사항 등을 준수하여야 하며, 기타 \"회사\"의 업무에 방해되는 행위를 하여서는 안 됩니다."
+                      ]
+                },
+                {
+                      "h": "제9조(권리의 귀속)",
+                      "p": [
+                            "\"모든 투자자문\"에 대한 저작권 및 지적재산권은 \"회사\"에 귀속됩니다."
+                      ]
+                },
+                {
+                      "h": "제10조(투자자문 제공 등)",
+                      "ol": [
+                            "\"투자자문\"은 주5일, 1일 7시간 제공함을 원칙으로 합니다.",
+                            "\"회사\"는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신두절 또는 운영상 합리적인 이유가 있는 경우 \"투자자문\" 제공을 일시적으로 중단할 수 있습니다. 이 경우 \"회사\"는 \"회원\"이 제공한 연락처 및 전자우편주소 등을 통해 \"회원\"에게 통지합니다. 다만, \"회사\"가 사전에 통지할 수 없는 부득이한 사유가 있는 경우 사후에 통지할 수 있습니다.",
+                            "\"회사\"는 \"투자자문\" 제공에 필요한 경우 정기점검을 실시할 수 있으며, 정기점검시간은 공지한 바에 따릅니다."
+                      ]
+                },
+                {
+                      "h": "제11조(투자자문의 제한 사유)",
+                      "p": [
+                            "\"회원\"이 다음 각 호에 해당하는 경우에는 \"투자자문\" 제공을 제한할 수 있습니다."
+                      ],
+                      "ol": [
+                            "\"회원\"의 등록 계좌가 폐쇄, 통합, 사고신고 된 계좌의 경우",
+                            "공익과 투자자보호를 위하여 필요하다고 인정하는 경우",
+                            "증권사의 사유(증권사의 전산 시스템 장애 등) 또는 기타 법률적 사유에 의하여 \"투자자문\"의 제공이 불가능한 경우"
+                      ]
+                },
+                {
+                      "h": "제12조(책임제한)",
+                      "ol": [
+                            "\"회사\"에서 제공하는 데이터 및 분석자료는 \"회원\"의 투자 판단을 위한 참고정보제공을 목적으로 하는 것이며, \"회사\"에서 제공하는 \"투자자문\"은 관련 특정 종목에 대한 구속적 투자 판단이나 투자권유를 구성하지 않습니다.",
+                            "\"회사\"에서 제공하는 투자자문으로 얻은 정보에 따른 투자는 손실이 발생할 수 있으며, 이에 대한 최종 판단은 이용자 자신이 하여야 하고, 그에 따른 책임은 이용자 자신에게 있으며, \"회사\"의 귀책사유가 없는 한 그로 인하여 발생하는 손해에 대해서 책임을 지지 않습니다.",
+                            "\"회사\"는 \"회원\"의 귀책사유로 인한 \"손실\"에 대하여는 책임을 지지 않습니다."
+                      ]
+                },
+                {
+                      "h": "제13조(준거법 및 재판관할)",
+                      "ol": [
+                            "\"회사\"와 \"회원\"간 발생한 분쟁에 대하여는 대한민국법을 준거법으로 합니다.",
+                            "\"회사\"와 \"회원\"간 발생한 분쟁에 관한 소송은 「민사소송법」에 따릅니다."
+                      ]
+                },
+                {
+                      "h": "부칙",
+                      "ol": [
+                            "본 약관은 2021년 12월 30일부터 시행됩니다."
+                      ]
+                }
+          ]
+    }
+  },
+
   /* ---------- 푸터 ---------- */
   footer: {
     menus: [
-      { label: "서비스이용약관",     url: "#" },
+      { label: "서비스이용약관",     url: "#", doc: "terms" },
       { label: "개인정보처리방침",   url: "#" },
       { label: "신용정보활용체제",   url: "#" },
       { label: "전자금융이용약관",   url: "#" },
@@ -371,6 +500,16 @@ button{font-family:inherit}
   font-size:16px;font-weight:700;cursor:pointer}
 .pv-ft button:hover{background:#0f2d5c}
 body.pv-open{overflow:hidden}
+/* 약관 팝업 본문 */
+.doc-eff{margin:0 0 18px;padding:9px 13px;background:#f5f8fc;border-radius:8px;
+  font-size:13px;color:#5a6a86;display:inline-block}
+.doc-sec{margin-bottom:20px}
+.doc-sec:last-child{margin-bottom:0}
+.doc-sec h4{margin:0 0 8px;font-size:15px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.doc-sec p{margin:0 0 7px;font-size:14px;color:#4a5872;line-height:1.8}
+.doc-sec ol{margin:6px 0 0;padding-left:20px}
+.doc-sec ol li{font-size:14px;color:#4a5872;line-height:1.8;margin-bottom:6px}
+.doc-sec ol li::marker{color:#8b97ac;font-weight:600}
 
 /* ================= TOAST ================= */
 .toast{
@@ -499,6 +638,8 @@ body.editing a{pointer-events:none}
   .pv-intro{font-size:13.5px}
   .pv-tb{font-size:13px}
   .pv-tb th,.pv-tb td{padding:9px 10px}
+  .doc-sec h4{font-size:14.5px}
+  .doc-sec p,.doc-sec ol li{font-size:13.5px;line-height:1.75}
   .pv-sec p{font-size:13.5px}
   .pv-note{font-size:12.5px}
   .pv-ft{padding:12px 18px calc(14px + env(safe-area-inset-bottom))}
@@ -758,6 +899,18 @@ body.editing a{pointer-events:none}
 <!-- 모바일 하단 고정 CTA -->
 <div class="mcta" id="mcta"><button type="button" data-k="mobileCta.label">무료 투자상담 신청하기</button></div>
 
+<!-- 약관 팝업 -->
+<div class="pv" id="docModal" role="dialog" aria-modal="true" aria-labelledby="docTitle">
+  <div class="pv-box">
+    <div class="pv-hd">
+      <h3 id="docTitle"></h3>
+      <button class="pv-x" type="button" id="docX" aria-label="닫기">✕</button>
+    </div>
+    <div class="pv-body" id="docBody"></div>
+    <div class="pv-ft"><button type="button" id="docOk">확인</button></div>
+  </div>
+</div>
+
 <!-- FINE 캡처 확대 보기 -->
 <div class="zoom" id="zoomBox">
   <button class="zoom-x" type="button" id="zoomClose" aria-label="닫기">✕</button>
@@ -952,7 +1105,10 @@ function render() {
 
   /* 푸터 */
   $("#ftMenu").innerHTML = C.footer.menus.map((m, i) =>
-    `<a href="${esc(m.url)}" data-k="footer.menus.${i}.label">${esc(m.label)}</a>`).join("");
+    `<a href="${esc(m.url)}"${m.doc ? ` data-doc="${esc(m.doc)}"` : ""} data-k="footer.menus.${i}.label">${esc(m.label)}</a>`).join("");
+  $("#ftMenu").querySelectorAll("a[data-doc]").forEach((a) => {
+    a.addEventListener("click", (e) => { if (editing) return; e.preventDefault(); docOpen(a.dataset.doc); });
+  });
   $("#ftNote").innerHTML = C.footer.disclaimer.map((d, i) =>
     `<span data-k="footer.disclaimer.${i}">${esc(d)}</span>`).join("<br>");
   $("#ftCo").innerHTML = C.footer.company.map((d, i) =>
@@ -1039,6 +1195,29 @@ function pvHide() {
   document.body.classList.remove("pv-open");
 }
 $("#consentMore").addEventListener("click", pvOpen);
+
+/* ── 약관 팝업 ─────────────────────────────────────── */
+function docOpen(key) {
+  const d = (C.docs || {})[key];
+  if (!d) return;
+  $("#docTitle").textContent = d.title || "";
+  $("#docBody").innerHTML =
+    (d.effective ? `<p class="doc-eff">${esc(d.effective)}</p>` : "") +
+    (d.sections || []).map((sec) => `
+      <section class="doc-sec">
+        ${sec.h ? `<h4>${esc(sec.h)}</h4>` : ""}
+        ${(sec.p || []).map((t) => `<p>${esc(t)}</p>`).join("")}
+        ${(sec.ol || []).length ? `<ol>${sec.ol.map((t) => `<li>${esc(t)}</li>`).join("")}</ol>` : ""}
+      </section>`).join("");
+  $("#docBody").scrollTop = 0;
+  $("#docModal").classList.add("on");
+  document.body.classList.add("pv-open");
+}
+const docHide = () => { $("#docModal").classList.remove("on"); document.body.classList.remove("pv-open"); };
+$("#docX").addEventListener("click", docHide);
+$("#docOk").addEventListener("click", docHide);
+$("#docModal").addEventListener("click", (e) => { if (e.target.id === "docModal") docHide(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") docHide(); });
 
 /* FINE 캡처 확대 보기 닫기 */
 const zoomHide = () => { $("#zoomBox").classList.remove("on"); document.body.classList.remove("pv-open"); };
