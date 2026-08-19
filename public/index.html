@@ -694,7 +694,8 @@ button{font-family:inherit}
 .zoom{position:fixed;inset:0;z-index:115;display:none;background:rgba(6,18,38,.92);
   overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pinch-zoom;padding:14px}
 .zoom.on{display:block}
-.zoom img{display:block;margin:0 auto;max-width:100%;background:#fff;border-radius:8px}
+/* 확대 보기에서는 원본 크기로 띄우고 좌우로 밀어서 본다 (모바일에서 표 글씨가 읽히도록) */
+.zoom img{display:block;margin:0 auto;max-width:none;width:auto;height:auto;background:#fff;border-radius:8px}
 .zoom-x{position:fixed;top:14px;right:14px;z-index:116;width:40px;height:40px;border:0;border-radius:50%;
   background:rgba(255,255,255,.92);color:#12203a;font-size:18px;cursor:pointer}
 
@@ -1353,10 +1354,17 @@ function render() {
       document.querySelector("#fineRows").outerHTML = fineTable().replace('class="fine-tb"', 'class="fine-tb" id="fineRows"');
     };
     $("#fineZoom").onclick = () => {
-      $("#zoomImg").src = shot.src;
-      $("#zoomImg").alt = shot.alt;
-      $("#zoomBox").classList.add("on");
+      const z = $("#zoomBox"), zi = $("#zoomImg");
+      zi.src = shot.src;
+      zi.alt = shot.alt;
+      z.classList.add("on");
       document.body.classList.add("pv-open");
+      /* 조회 표가 오른쪽에 있으므로 그쪽이 먼저 보이도록 스크롤 */
+      const place = () => {
+        z.scrollLeft = Math.max(0, (zi.offsetWidth - z.clientWidth) * 0.62);
+        z.scrollTop = 0;
+      };
+      zi.complete ? place() : (zi.onload = place);
     };
   } else {
     fineCard.classList.remove("is-img");
