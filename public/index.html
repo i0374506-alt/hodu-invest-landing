@@ -27,16 +27,16 @@ const CONFIG = {
     /* img 에 실제 로고 파일을 넣으면 그림으로 바뀝니다.
        파일이 없으면 자동으로 기존 임시 도형이 표시됩니다. */
     { key: "fine", name: "파 인",     sub: "금융소비자 정보포털", url: "https://fine.fss.or.kr", img: "assets/logo-fine.png" },
-    { key: "fsc",  name: "금융위원회", sub: "",                  url: "https://www.fsc.go.kr",  img: "assets/logo-fsc.png" },
-    { key: "fss",  name: "금융감독원", sub: "",                  url: "https://www.fss.or.kr",  img: "assets/logo-fss.png" }
+    { key: "fss",  name: "금융감독원", sub: "",                  url: "https://www.fss.or.kr",  img: "assets/logo-fss.png" },
+    { key: "fsc",  name: "금융위원회", sub: "",                  url: "https://www.fsc.go.kr",  img: "assets/logo-fsc.png" }
   ],
 
   /* ---------- 첫 화면 헤드라인 ---------- */
   hero: {
-    badge: "실시간",
-    t1: "당일 급등",
-    t2: "예상종목",              /* 금색 강조 */
-    t3: "매일 받아보세요",
+    /* 한 줄로 표시됩니다. t2 만 금색 */
+    t1: "당일 급등 ",
+    t2: "예상종목",
+    t3: " 매일 받아보세요",
     feats: [
       { icon: "brief",  t1: "시장 브리핑",           t2: "주요 이슈와 흐름 분석" },
       { icon: "target", t1: "종목 매수가·매도가 안내", t2: "매수가 · 매도가 제시" },
@@ -534,7 +534,8 @@ const CONFIG = {
       { label: "신용정보활용체제",   url: "#" },
       { label: "전자금융이용약관",   url: "#", doc: "efinance" },
       { label: "고객권리 안내문",    url: "#" },
-      { label: "마케팅정보수신동의", url: "#" }
+      { label: "마케팅정보수신동의", url: "#" },
+      { label: "투자자문사 등록 확인", url: "#", fine: true }
     ],
     tel: "대표전화 02-2070-5111",
     email: "이메일 info@hoduinvest.co.kr",
@@ -576,42 +577,22 @@ button{font-family:inherit}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
 
 /* ================= HEADER ================= */
-.hd{background:var(--white);border-bottom:1px solid var(--line)}
-.hd-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;max-width:var(--wrap);margin:0 auto}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:38px;height:44px;flex:none}
-.logo-txt .en,.logo-txt .ko{display:block}
-.logo-txt .en{font-size:21px;font-weight:800;letter-spacing:.06em;color:var(--navy);line-height:1.15}
-.logo-txt .ko{font-size:12.5px;color:var(--sub);letter-spacing:.02em}
-
-.gov{display:flex;align-items:center;gap:10px}
-.gov a{
-  display:flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--line);
-  border-radius:999px;background:#fbfcfe;transition:.18s;white-space:nowrap;
-}
-.gov a:hover{border-color:var(--gold);background:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(11,34,71,.08)}
-.gov .gnm{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
-.gov .gsub{font-size:10px;color:#8b98ae;display:block;font-weight:500;letter-spacing:-.02em}
-.gov svg{width:22px;height:22px;flex:none}
-/* 로고는 <img> 대신 배경이미지 박스로 표시한다.
-   flex 안의 <img>는 iOS Safari에서 폭이 0으로 접혀 사라지는 문제가 있다. */
-.gov-logo{display:block;width:104px;height:30px;flex:none;
+.hd{background:var(--white);border-bottom:1px solid var(--line);flex:none}
+.hd-in{max-width:1240px;margin:0 auto;padding:10px 24px}
+.gov{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:center;
+  max-width:620px;margin:0 auto}
+.gov a{display:block;padding:6px 10px;border:1px solid var(--line);border-radius:10px;
+  background:#fbfcfe;transition:.18s}
+.gov a:hover{border-color:var(--gold);background:#fff;box-shadow:0 4px 12px rgba(11,34,71,.08)}
+/* 로고는 배경이미지 박스로 표시 — flex 안의 <img>/flex-grow 는 iOS Safari 에서
+   폭이 0으로 접혀 사라지는 문제가 있어 '고정 트랙 + width:100%' 조합을 쓴다. */
+.gov-logo{display:block;width:100%;height:30px;
   background-repeat:no-repeat;background-position:center;background-size:contain}
-.gov a.has-img{padding:5px 11px}
-.gov-div{width:1px;height:20px;background:var(--line)}
-.hd-badge{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap;
-  border:1px solid var(--line);background:#fbfcfe;border-radius:999px;padding:8px 14px;cursor:pointer;
-  font-family:inherit;letter-spacing:-.02em;transition:.18s}
-.hd-badge:hover{border-color:var(--gold);background:#fff;box-shadow:0 4px 12px rgba(11,34,71,.08)}
-/* FINE 팝업 안의 조회 화면 사진 */
-.fine-shot{margin:16px 0 14px}
-.fine-shot button{width:100%;padding:0;border:1px solid #e4e9f2;border-radius:10px;background:#fff;
-  cursor:zoom-in;overflow:hidden;display:block}
-.fine-shot img{width:100%;height:auto;display:block}
-.fine-hint{margin-top:8px;font-size:12.5px;color:#8b97ac;text-align:center}
-.fine-link{display:flex;align-items:center;justify-content:center;height:48px;margin-top:14px;
-  border:1.6px solid var(--navy);border-radius:9px;color:var(--navy);font-size:15px;font-weight:700}
-.fine-link:hover{background:var(--navy);color:#fff}
+.gov svg{width:22px;height:22px;display:block;margin:0 auto}
+.gov .gnm{display:block;text-align:center;font-size:12.5px;font-weight:700;color:var(--navy)}
+.gov .gsub{display:none}
+.gov-div{display:none}
+.hd-badge{display:none}
 
 /* ================= STAGE (한 화면 구성) ================= */
 .stage{display:flex;flex-direction:column;flex:1;min-height:0}
@@ -622,7 +603,8 @@ button{font-family:inherit}
 .h-badge{display:inline-flex;align-items:center;gap:7px;border:1.6px solid var(--navy);
   border-radius:999px;padding:5px 15px;font-size:14px;font-weight:800;color:var(--navy)}
 .h-badge i{width:7px;height:7px;border-radius:50%;background:var(--gold);display:block;flex:none}
-.h-title{font-size:52px;font-weight:900;line-height:1.18;letter-spacing:-.045em;color:var(--navy);margin:16px 0 0}
+.h-title{display:inline-block;font-size:52px;font-weight:900;line-height:1.2;letter-spacing:-.045em;
+  color:var(--navy);margin:0;white-space:nowrap}   /* 한 줄 고정 — 폭에 맞춰 JS가 크기 조절 */
 .h-title .gold{color:var(--gold)}
 .h-feats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:32px}
 .h-feat{position:relative;text-align:center;padding:0 8px}
@@ -673,7 +655,9 @@ button{font-family:inherit}
 /* ================= 신청 영역(남색 띠) ================= */
 .cta{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);padding:16px 24px 18px}
 .cta-in{max-width:1240px;margin:0 auto}
-.cta-title{margin:0 0 16px;text-align:center;color:#fff;font-size:21px;font-weight:800;letter-spacing:-.035em}
+.cta-title{display:inline-block;width:auto;margin:0 0 16px;color:#fff;font-size:21px;font-weight:800;letter-spacing:-.035em;white-space:nowrap}
+.cta-in{text-align:center}
+.cta-form,.cta-consents{text-align:left}
 .cta-title .gold{color:var(--gold)}
 .cta-form{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:12px}
 .cta-form input{min-width:0;width:100%;height:58px;border:1px solid #33507d;border-radius:9px;background:#fff;
@@ -809,24 +793,19 @@ body.editing a{pointer-events:none}
 }
 
 @media (max-width:900px){
-  /* ── 모바일: 스크롤 없이 한 화면에 담기 ── */
-  html,body{height:100%}
-  body{display:flex;flex-direction:column;min-height:100dvh}
-  .stage{min-height:0}
+  /* ── 모바일: 헤더 + 첫 화면이 정확히 한 화면.
+        푸터(약관)는 요청에 따라 첫 화면 아래로 내려가 스크롤하면 보입니다. ── */
+  body{display:block;min-height:0}
+  .hd{height:44px;display:flex;align-items:center}
+  .hd-in{width:100%;padding:0 12px}
+  .stage{height:calc(100dvh - 44px);min-height:0}
 
-  .hd-in{padding:7px 14px;gap:8px}
-  .gov{gap:6px}
-  .gov a{padding:5px 6px}
-  .gov img,.gov svg{height:20px;width:20px}
-  .gov .gsub{display:none}
-  .gov-div,.hd-badge{display:none}
-  .logo-mark{width:26px;height:30px}
-  .logo-txt .en{font-size:15px}
-  .logo-txt .ko{font-size:10px}
+  .gov{gap:8px;max-width:none}
+  .gov a{padding:4px 8px;border-radius:8px}
+  .gov-logo{height:24px}
 
   .hero{grid-template-columns:1fr;gap:12px;padding:12px 14px 10px;align-content:start}
-  .h-badge{padding:4px 12px;font-size:12.5px}
-  .h-title{font-size:30px;line-height:1.22;margin-top:10px}
+  .h-title{font-size:30px}
   .h-feats{margin-top:12px}
   .h-feat{padding:0 3px}
   .h-ico{width:36px;height:36px;margin-bottom:6px}
@@ -889,16 +868,8 @@ body.editing a{pointer-events:none}
 
 /* ── 모바일 한 화면 맞춤: 각 구간을 압축해 표에 공간을 준다 ── */
 @media (max-width:900px){
-  .hd-in{padding:6px 12px;gap:8px}
-  .logo-mark{width:22px;height:26px}
-  .logo-txt .en{font-size:13.5px}
-  .logo-txt .ko{font-size:9px}
-  .gov{flex:1;min-width:0;justify-content:flex-end;gap:5px}
-  .gov a,.gov a.has-img{padding:4px 5px;border-radius:8px}
-  .gov-logo{width:auto;flex:1 1 auto;min-width:0;height:20px}
 
   .hero{padding:10px 13px 8px;gap:9px}
-  .h-badge{padding:3px 11px;font-size:12px}
   .h-title{font-size:27px;margin-top:8px;line-height:1.2}
   .h-feats{margin-top:10px}
   .h-ico{width:32px;height:32px;margin-bottom:5px}
@@ -924,7 +895,6 @@ body.editing a{pointer-events:none}
 /* ── 2차 압축: 표(추천종목 내역)에 최대한 공간 배분 ── */
 @media (max-width:900px){
   .h-title{font-size:24px;line-height:1.18;margin-top:7px}
-  .h-badge{padding:2px 10px;font-size:11.5px}
   .h-feats{margin-top:8px}
   .h-ico{width:30px;height:30px;margin-bottom:4px}
   .h-ico svg{width:16px;height:16px}
@@ -980,16 +950,6 @@ body.editing a{pointer-events:none}
 <!-- ===== HEADER ===== -->
 <header class="hd">
   <div class="hd-in">
-    <a class="logo" href="#top">
-      <svg class="logo-mark" viewBox="0 0 40 46" fill="none" aria-hidden="true">
-        <path d="M4 4v38M28 4v38M4 23h24" stroke="#0b2247" stroke-width="4" stroke-linecap="square"/>
-        <path d="M34 6v34" stroke="#c8a24a" stroke-width="3.4" stroke-linecap="round"/>
-      </svg>
-      <span class="logo-txt">
-        <span class="en" data-k="brand.en">HODU INVEST</span>
-        <span class="ko" data-k="brand.ko">호두인베스트</span>
-      </span>
-    </a>
     <nav class="gov" id="govLinks" aria-label="관련 기관 바로가기"></nav>
   </div>
 </header>
@@ -998,12 +958,7 @@ body.editing a{pointer-events:none}
   <!-- ===== 첫 화면 ===== -->
   <section class="hero">
     <div class="hero-left">
-      <span class="h-badge">[ <i></i> <span data-k="hero.badge">실시간</span> ]</span>
-      <h1 class="h-title">
-        <span data-k="hero.t1">당일 급등</span><br>
-        <span class="gold" data-k="hero.t2">예상종목</span><br>
-        <span data-k="hero.t3">매일 받아보세요</span>
-      </h1>
+      <h1 class="h-title" id="heroTitle"><span data-k="hero.t1">당일 급등 </span><span class="gold" data-k="hero.t2">예상종목</span><span data-k="hero.t3"> 매일 받아보세요</span></h1>
       <div class="h-feats" id="heroFeats"></div>
     </div>
 
@@ -1182,8 +1137,7 @@ function render() {
         ? `<span class="gov-logo" role="img" aria-label="${esc(g.name)}" data-i="${i}"
                  style="background-image:url('${esc(g.img)}')"></span>`
         : govMark(g.key) + govText(g, i)}
-    </a>`).join("") + `<span class="gov-div"></span><button class="hd-badge" type="button" id="fineBadge" data-k="fine.badgeBtn">${esc(C.fine.badgeBtn)}</button>`;
-  $("#fineBadge").addEventListener("click", fineOpen);
+    </a>`).join("") + "";
 
   /* 로고 파일이 없으면 기존 임시 도형으로 자동 대체 (배경이미지는 onerror 가 없어 미리 확인) */
   $("#govLinks").querySelectorAll(".gov-logo[data-i]").forEach((box) => {
@@ -1245,12 +1199,16 @@ function render() {
 
   /* 푸터 */
   $("#ftMenu").innerHTML = C.footer.menus.map((m, i) =>
-    `<a href="${esc(m.url)}"${m.doc ? ` data-doc="${esc(m.doc)}"` : ""} data-k="footer.menus.${i}.label">${esc(m.label)}</a>`).join("");
+    `<a href="${esc(m.url)}"${m.doc ? ` data-doc="${esc(m.doc)}"` : ""}${m.fine ? ' data-fine="1"' : ""} data-k="footer.menus.${i}.label">${esc(m.label)}</a>`).join("");
   $("#ftMenu").querySelectorAll("a[data-doc]").forEach((a) => {
     a.addEventListener("click", (e) => { if (editing) return; e.preventDefault(); docOpen(a.dataset.doc); });
   });
+  $("#ftMenu").querySelectorAll("a[data-fine]").forEach((a) => {
+    a.addEventListener("click", (e) => { if (editing) return; e.preventDefault(); fineOpen(); });
+  });
   $("#ftNote").innerHTML = C.footer.disclaimer.map((d, i) =>
     `<span data-k="footer.disclaimer.${i}">${esc(d)}</span>`).join("<br>");
+  if (typeof fitTitles === "function") setTimeout(fitTitles, 0);
   if (editing) enableEditing(true);
 }
 render();
@@ -1374,6 +1332,28 @@ $("#pvClose").addEventListener("click", pvHide);
 $("#pvOk").addEventListener("click", pvHide);
 pvModal.addEventListener("click", (e) => { if (e.target === pvModal) pvHide(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && pvModal.classList.contains("on")) pvHide(); });
+
+/* ── 제목을 한 줄에 맞춰 글자 크기 자동 조절 ────────── */
+function fitOneLine(el, max, min) {
+  if (!el) return;
+  const room = el.parentElement.clientWidth - 2;   /* 들어갈 수 있는 폭 */
+  let size = max;
+  el.style.fontSize = size + "px";
+  /* inline-block 이므로 offsetWidth 가 곧 글자 폭 */
+  while (size > min && el.offsetWidth > room) {
+    size -= 0.5;
+    el.style.fontSize = size + "px";
+  }
+}
+function fitTitles() {
+  const wide = innerWidth > 900;
+  fitOneLine($("#heroTitle"), wide ? 52 : 34, 15);
+  fitOneLine(document.querySelector(".cta-title"), wide ? 21 : 15, 9.5);
+}
+addEventListener("resize", fitTitles);
+addEventListener("orientationchange", () => setTimeout(fitTitles, 250));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitles);
+fitTitles();
 
 /* ── 패널 탭 전환 (모바일) ─────────────────────────── */
 $("#panelTabs").addEventListener("click", (e) => {
