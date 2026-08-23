@@ -35,9 +35,23 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options        = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy        = "strict-origin-when-cross-origin"
+    # 다른 사이트가 이 페이지를 iframe 으로 감싸 신청 버튼을 가로채는 공격(클릭재킹) 차단
+    X-Frame-Options           = "DENY"
+    X-Content-Type-Options    = "nosniff"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    # HTTPS 강제 (1년) — 중간자 공격 방어
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    # 쓰지 않는 브라우저 기능 차단
+    Permissions-Policy        = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+    # 외부 스크립트 주입·폼 탈취 차단. 폰트(jsdelivr) 외 외부 리소스는 모두 거부
+    Content-Security-Policy   = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
+
+# 신청 데이터가 오가는 API 는 캐시 금지
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store"
+    X-Robots-Tag  = "noindex, nofollow"
 
 # 어드민 페이지는 캐시/색인 금지
 [[headers]]

@@ -1,7 +1,7 @@
 /* /api/admin/* — 관리자 전용 API
    login / me / leads / delete / clear / export(CSV) */
 import { getStore } from "@netlify/blobs";
-import { json, authed, issueToken, adminPassword, clientIp } from "../lib/shared.mjs";
+import { json, authed, issueToken, adminPassword, clientIp, safeEqual } from "../lib/shared.mjs";
 
 export const config = { path: "/api/admin/*" };
 
@@ -41,13 +41,15 @@ export default async (req) => {
 
     let body = {};
     try { body = await req.json(); } catch {}
-    if (String(body.password || "") !== pw) {
+    if (!safeEqual(String(body.password || ""), pw)) {
       fails.push(now);
       await rl.setJSON(key, fails);
       return json({ error: "비밀번호가 일치하지 않습니다." }, 401);
     }
     await rl.setJSON(key, []);
-    return json({ token: issueToken(12) });
+    const token = issueToken(12);
+    if (!token) return json({ error: "서버 설정 오류: ADMIN_SECRET 을 등록해 주세요." }, 500);
+    return json({ token });
   }
 
   /* ── 아래는 모두 인증 필요 ──────────────────────────── */
@@ -77,9 +79,10 @@ export default async (req) => {
   if (action === "clear") {
     if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
     const s = store();
-    const { blobs } = await s.list();
-    await Promise.all(blobs.map((b) => s.delete(b.key).catch(() => {})));
-    return json({ ok: true, removed: blobs.filter((b) => b.key.startsWith("lead/")).length });
+    const { blobs } = await s.list({ prefix: "lead/" });
+    const { blobs: dups } = await s.list({ prefix: "dup/" });
+    await Promise.all([...blobs, ...dups].map((b) => s.delete(b.key).catch(() => {})));
+    return json({ ok: true, removed: blobs.length });
   }
 
   if (action === "export") {
