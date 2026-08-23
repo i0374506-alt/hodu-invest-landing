@@ -53,6 +53,10 @@ const CONFIG = {
     tab2: "수익률 기준 안내",
     portfolio: {
       title: "〈 최근 추천 포트폴리오 내역 〉",
+      /* 캡처 이미지를 넣으면 아래 표 대신 이미지가 표시됩니다.
+         종목을 갱신할 때는 같은 이름(assets/portfolio.jpg)으로 덮어쓰면 됩니다.
+         파일이 없으면 자동으로 아래 표가 표시됩니다. */
+      image: "assets/portfolio.jpg",
       cols: ["매수일", "매도일", "종목 명", "매수가", "매도가", "수익률"],
       rows: [
         ["7/1",  "7/15", "대덕전자",           "134,000", "140,650", "+4.96%"],
@@ -599,7 +603,7 @@ button{font-family:inherit}
 
 /* ================= HERO ================= */
 .hero{flex:1;display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center;
-  width:100%;max-width:1240px;margin:0 auto;padding:18px 24px;min-height:0}
+  width:100%;max-width:1240px;margin:0 auto;padding:12px 24px;min-height:0}
 .h-badge{display:inline-flex;align-items:center;gap:7px;border:1.6px solid var(--navy);
   border-radius:999px;padding:5px 15px;font-size:14px;font-weight:800;color:var(--navy)}
 .h-badge i{width:7px;height:7px;border-radius:50%;background:var(--gold);display:block;flex:none}
@@ -615,20 +619,21 @@ button{font-family:inherit}
 .h-feat .t2{display:block;font-size:12px;color:#6a7893;margin-top:4px;letter-spacing:-.03em}
 
 /* ================= 실적/안내 패널 ================= */
-.panels{display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;height:100%;max-height:470px}
+.panels{display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;height:100%;max-height:500px}
 .tabs{display:none;gap:8px}
 .tabs button{flex:1;height:38px;border:1px solid #dbe2ee;background:#fff;border-radius:9px;
   font-size:13.5px;font-weight:700;color:#5a6a86;cursor:pointer}
 .tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff}
 .panel{background:#fff;border:1px solid #e2e8f2;border-radius:14px;box-shadow:0 12px 32px rgba(11,34,71,.10);
   display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.panel.pf{flex:1.75}
-.panel.nt{flex:1}
+.panel.pf{flex:3}
+.panel.nt{flex:.9}
 .panel-hd{padding:11px 14px;text-align:center;font-size:14.5px;font-weight:800;color:#c0392b;
   border-bottom:1px solid #eef2f8;background:#fbfcfe;letter-spacing:-.03em}
 .panel.nt .panel-hd{color:var(--navy)}
 .panel.nt .panel-hd::before{content:"✓ ";color:#c0392b}
-.panel-body{overflow:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.panel-body{overflow:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1}
+.panel.pf:has(.pf-shot) .panel-body{overflow:hidden}
 .pf-tb{width:100%;border-collapse:collapse;font-size:12px}
 .pf-tb th{position:sticky;top:0;z-index:1;background:#edf1f8;color:var(--navy);font-weight:700;
   padding:8px 5px;white-space:nowrap;border-bottom:1px solid #dde4ef}
@@ -637,6 +642,10 @@ button{font-family:inherit}
 .pf-tb td.nm{text-align:left;padding-left:10px;font-weight:600;color:var(--ink)}
 .pf-tb td.up{color:#d4362a;font-weight:800}
 .pf-tb td.dn{color:#1f5fd0;font-weight:800}
+/* 캡처 이미지는 패널 안에 전체가 보이도록 맞춘다 (잘리지 않게) */
+.pf-shot{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+  padding:0;border:0;background:#fff;cursor:zoom-in}
+.pf-shot img{display:block;max-width:100%;max-height:100%;width:auto;height:auto}
 .nt-body{padding:13px 16px;text-align:center}
 .nt-body p{margin:0 0 10px;font-size:12.5px;color:#4a5872;line-height:1.75;letter-spacing:-.02em}
 .nt-body p:last-child{margin-bottom:0;color:var(--navy);font-weight:600}
@@ -653,7 +662,7 @@ button{font-family:inherit}
 .hp{position:absolute;left:-9999px;opacity:0;height:0}
 
 /* ================= 신청 영역(남색 띠) ================= */
-.cta{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);padding:16px 24px 18px}
+.cta{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-deep) 100%);padding:14px 24px 16px}
 .cta-in{max-width:1240px;margin:0 auto}
 .cta-title{display:inline-block;width:auto;margin:0 0 16px;color:#fff;font-size:21px;font-weight:800;letter-spacing:-.035em;white-space:nowrap}
 .cta-in{text-align:center}
@@ -1165,11 +1174,34 @@ function render() {
   const rate = (v) => String(v).trim().startsWith("-") ? "dn" : "up";
   /* 종목명 칸은 왼쪽 정렬, 마지막(수익률) 칸은 등락 색 — 열 순서가 바뀌어도 따라갑니다 */
   const nameCol = pf.cols.findIndex((c) => String(c).includes("종목"));
+  const pfBody = document.querySelector(".panel.pf .panel-body");
+  if (pf.image) {
+    pfBody.innerHTML = `<button type="button" class="pf-shot" id="pfZoom" aria-label="크게 보기">
+        <img src="${esc(pf.image)}" alt="${esc(pf.title)}">
+      </button>`;
+    const shot = pfBody.querySelector("img");
+    shot.onerror = () => {                       /* 이미지가 없으면 표로 되돌림 */
+      pfBody.innerHTML = '<table class="pf-tb" id="pfTable"></table>';
+      drawTable();
+    };
+    $("#pfZoom").onclick = () => {
+      const z = $("#zoomBox"), zi = $("#zoomImg");
+      zi.src = shot.src; zi.alt = shot.alt;
+      z.classList.add("on");
+      const place = () => { z.scrollLeft = Math.max(0, (zi.offsetWidth - z.clientWidth) / 2); z.scrollTop = 0; };
+      zi.complete ? place() : (zi.onload = place);
+    };
+  } else {
+    if (!document.querySelector("#pfTable")) pfBody.innerHTML = '<table class="pf-tb" id="pfTable"></table>';
+    drawTable();
+  }
+  function drawTable() {
   $("#pfTable").innerHTML =
     `<thead><tr>${pf.cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>` +
     `<tbody>${pf.rows.map((r) => `<tr>` + r.map((v, i) =>
       `<td class="${i === nameCol ? "nm" : (i === r.length - 1 ? rate(v) : "")}">${esc(v)}</td>`).join("") +
       `</tr>`).join("")}</tbody>`;
+  }
 
   /* 수익률 기준 안내 */
   $("#ntBody").innerHTML = C.panels.notice.paras.map((t, i) =>
