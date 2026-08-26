@@ -31,6 +31,11 @@
   to   = "/.netlify/functions/admin/:splat"
   status = 200
 
+[[redirects]]
+  from = "/api/stats"
+  to   = "/.netlify/functions/stats"
+  status = 200
+
 # 기본 보안 헤더
 [[headers]]
   for = "/*"

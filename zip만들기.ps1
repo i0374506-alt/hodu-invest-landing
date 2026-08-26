@@ -63,6 +63,11 @@ $toml = @'
   to   = "/.netlify/functions/admin/:splat"
   status = 200
 
+[[redirects]]
+  from = "/api/stats"
+  to   = "/.netlify/functions/stats"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
