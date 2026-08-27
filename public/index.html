@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>인베스트뷰 | 무료 투자상담 신청</title>
 <meta name="description" content="금융위원회 등록 투자자문사 인베스트뷰. 전문가와 1:1 무료 투자상담을 신청하세요.">
+<!-- 카카오톡·페이스북 등 링크 공유 시 미리보기에 쓰이는 태그.
+     주소가 바뀌면(예: investview.co.kr 연결 시) og:url 도 함께 바꿔주세요. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="인베스트뷰">
+<meta property="og:title" content="인베스트뷰 | 무료 투자상담 신청">
+<meta property="og:description" content="금융위원회 등록 투자자문사 인베스트뷰. 전문가와 1:1 무료 투자상담을 신청하세요.">
+<meta property="og:url" content="https://investviewe.netlify.app/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="인베스트뷰 | 무료 투자상담 신청">
+<meta name="twitter:description" content="금융위원회 등록 투자자문사 인베스트뷰. 전문가와 1:1 무료 투자상담을 신청하세요.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 
@@ -94,13 +104,11 @@ const CONFIG = {
     title3: " 바랍니다.",
     namePh: "이름",
     phonePh: "휴대폰 번호",
-    button: "무료 브리핑 신청",
+    button: "이번주 급등주 받아보기",
     notice: "수집된 개인정보는 신청 확인과 안내를 위한 목적으로만 이용되며, 목적 달성 후 관련 법령에 따른 보존 의무가 있는 경우를 제외하고 지체 없이 안전하게 파기됩니다.",
     /* 실시간 신청 현황 배지 — 표시되는 숫자는 실제 신청 건수(서버 집계)입니다.
        가짜로 계속 올라가는 숫자가 아니라, 화면에 나타날 때 0에서 실제 값까지
        애니메이션으로 올라가는 방식입니다. */
-    liveBadge: "실시간 분석중...",
-    liveLabel: "명이 신청하였습니다",
     endpoint: "/api/leads",
     successMsg: "신청이 접수되었습니다. 순차적으로 연락드리겠습니다.",
     demoMsg: "[미리보기] 서버가 연결되지 않아 실제 전송은 되지 않았습니다."
@@ -668,31 +676,15 @@ button{font-family:inherit}
 .cta-form{text-align:left}
 .cta-title .gold{color:var(--gold)}
 .cta-form{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:12px}
-.cta-form input{min-width:0;width:100%;height:58px;border:1px solid #2a3c60;border-radius:9px;
-  background:#0f1c33;padding:0 18px;font-size:16px;color:#fff;outline:none}
-.cta-form input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(230,57,70,.3)}
-.cta-form input::placeholder{color:#7c8bab}
-.cta-btn{height:58px;border:0;border-radius:9px;background:var(--red);color:#fff;
-  font-size:19px;font-weight:800;letter-spacing:-.03em;cursor:pointer;transition:.18s;
-  box-shadow:0 8px 22px rgba(230,57,70,.35)}
-.cta-btn:hover{background:#d92d3a;transform:translateY(-1px)}
+.cta-form input{min-width:0;width:100%;height:58px;border:1px solid #33507d;border-radius:9px;background:#fff;
+  padding:0 18px;font-size:16px;color:var(--ink);outline:none}
+.cta-form input:focus{box-shadow:0 0 0 3px rgba(200,162,74,.35)}
+.cta-form input::placeholder{color:#9aa5b8}
+.cta-btn{height:58px;border:0;border-radius:9px;background:var(--gold);color:#20180a;
+  font-size:19px;font-weight:800;letter-spacing:-.03em;cursor:pointer;transition:.18s}
+.cta-btn:hover{background:#d5b25f;transform:translateY(-1px)}
 .cta-notice{margin:12px 0 0;text-align:center;font-size:12px;line-height:1.65;color:#8fa1bf}
 
-/* ── 실시간 신청 현황(실제 데이터, 진입 시 카운트업) ── */
-.live-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;margin:0 0 10px}
-.live-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;
-  background:linear-gradient(90deg,#1f6feb,#22d3ee);box-shadow:0 0 16px rgba(34,211,238,.5);
-  font-size:11px;font-weight:700;color:#fff;letter-spacing:-.01em;
-  animation:liveGlow 2.2s ease-in-out infinite}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#fff;flex:none;
-  animation:liveDot 1.4s ease-out infinite}
-.live-count{margin:0;font-size:13.5px;font-weight:800;color:#fff;letter-spacing:-.02em}
-.live-count-num{display:inline-block;min-width:2ch;color:var(--gold);font-variant-numeric:tabular-nums;
-  text-shadow:0 0 14px rgba(200,162,74,.55);transition:transform .18s ease}
-.live-count-num.tick{transform:scale(1.14)}
-@keyframes liveGlow{0%,100%{box-shadow:0 0 12px rgba(34,211,238,.4)}50%{box-shadow:0 0 24px rgba(34,211,238,.85)}}
-@keyframes liveDot{0%{box-shadow:0 0 0 0 rgba(255,255,255,.65)}70%{box-shadow:0 0 0 8px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
-@media (prefers-reduced-motion:reduce){.live-badge,.live-dot{animation:none}}
 
 /* FINE 조회 사진 확대 보기 오버레이
    ※ 화면 개편 과정에서 이 규칙이 통째로 빠져, 스타일 없는 div가 문서 흐름에
@@ -954,9 +946,6 @@ body.editing a{pointer-events:none}
   .nt-body p{font-size:11px;margin-bottom:7px}
 
   .cta-title{font-size:12.5px;margin-bottom:7px}
-  .live-wrap{gap:4px;margin-bottom:9px}
-  .live-badge{padding:4px 12px;font-size:10.5px}
-  .live-count{font-size:12.5px}
   .ft-note{font-size:8px}
 }
 
@@ -1007,15 +996,6 @@ body.editing a{pointer-events:none}
   <!-- ===== 신청 영역 ===== -->
   <section class="cta" id="apply">
     <div class="cta-in">
-      <div class="live-wrap" id="liveWrap" hidden>
-        <span class="live-badge">
-          <span class="live-dot"></span>
-          <span data-k="cta.liveBadge">실시간 분석중...</span>
-        </span>
-        <p class="live-count">
-          <span class="live-count-num" id="liveCountNum">0</span><span data-k="cta.liveLabel">명이 신청하였습니다</span>
-        </p>
-      </div>
       <h2 class="cta-title">
         <span data-k="cta.title1">실시간 종목 매수가와 매도가 받아보시고 </span><span class="gold" data-k="cta.title2">직접 수익률을 확인해보시기</span><span data-k="cta.title3"> 바랍니다.</span>
       </h2>
@@ -1263,48 +1243,6 @@ render();
     }
   } catch (e) { /* 실패해도 기본 문구로 정상 노출 */ }
 })();
-
-/* ── 실시간 신청 현황 카운터 ──────────────────────────
-   화면에 나타날 때 0 → 실제 신청 건수(서버 집계)까지 부드럽게 올라간다.
-   가짜로 계속 증가하는 숫자가 아니라, 실제 값을 모션 그래픽처럼 보여주는 것뿐이다.
-   신청 건수가 없거나(0) API 오류면 신뢰도만 떨어뜨리므로 배지 자체를 숨긴다. */
-(async () => {
-  const wrap = $("#liveWrap");
-  if (!wrap) return;
-  try {
-    const r = await fetch("/api/stats", { cache: "no-store" });
-    const d = await r.json();
-    const target = Number(d.count);
-    if (!Number.isFinite(target) || target < 1) return;   // 표시할 실적이 없으면 숨김 유지
-
-    wrap.hidden = false;
-    const el = $("#liveCountNum");
-    /* 페이지가 한 화면 안에 다 들어오는 레이아웃이라 "스크롤해서 보일 때"를
-       따로 감지하지 않고, 화면이 자리 잡은 직후 바로 카운트업한다. */
-    const runCountUp = () => {
-      const start = Date.now();
-      const dur = 1800;
-      const from = Math.max(0, target - Math.min(target, 24));  // 살짝 아래에서 출발해 상승감을 준다
-      const ease = (t) => 1 - Math.pow(1 - t, 3);                // ease-out
-      let lastShown = -1;
-      /* setInterval 사용 — requestAnimationFrame 은 브라우저가 탭을 그리지
-         않는 순간(백그라운드 탭 등)에는 멈추므로, 값이 확실히 올라가도록 한다. */
-      const timer = setInterval(() => {
-        const p = Math.min(1, (Date.now() - start) / dur);
-        const val = Math.round(from + (target - from) * ease(p));
-        if (val !== lastShown) {
-          el.textContent = val.toLocaleString("ko-KR");
-          el.classList.add("tick");
-          setTimeout(() => el.classList.remove("tick"), 140);
-          lastShown = val;
-        }
-        if (p >= 1) clearInterval(timer);
-      }, 30);
-    };
-    setTimeout(runCountUp, 350);
-  } catch (e) { /* 실패 시 배지 숨김 유지 */ }
-})();
-
 /* ============================================================
    3) 폼 동작
    ============================================================ */
