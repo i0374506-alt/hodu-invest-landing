@@ -19,14 +19,15 @@ export default async (req, context) => {
   /* 허니팟: 숨은 칸이 채워지면 봇 → 성공한 것처럼 응답하고 버림 */
   if (String(b.website || "").trim()) return json({ ok: true });
 
-  const name = String(b.name || "").trim().slice(0, 40);
+  const name = String(b.name || "").trim().slice(0, 5);
   const phone = String(b.phone || "").replace(/\D/g, "").slice(0, 11);
   const experience = String(b.experience || "").trim();
   const interests = Array.isArray(b.interests)
     ? [...new Set(b.interests.filter((i) => ALLOWED_INTERESTS.includes(i)))].slice(0, 5)
     : [];
 
-  if (name.length < 2 || /[<>]/.test(name)) return json({ error: "성함을 정확히 입력해 주세요." }, 400);
+  /* 이름은 한글 2~5자만 허용 (영문·숫자·기호·자음/모음 단독 입력 차단) */
+  if (!/^[가-힣]{2,5}$/.test(name)) return json({ error: "이름은 한글 2~5자로 입력해 주세요." }, 400);
   if (!PHONE.test(phone)) return json({ error: "연락처를 정확히 입력해 주세요." }, 400);
   if (experience && !ALLOWED_EXPERIENCE.includes(experience))
     return json({ error: "투자경험을 다시 선택해 주세요." }, 400);

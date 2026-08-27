@@ -1002,7 +1002,7 @@ body.editing a{pointer-events:none}
       <form id="leadForm" novalidate>
         <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="cta-form">
-          <input id="f-name" type="text" autocomplete="name" maxlength="20">
+          <input id="f-name" type="text" autocomplete="name" maxlength="5" inputmode="text" lang="ko">
           <input id="f-phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13">
           <button class="cta-btn" type="submit" data-k="cta.button">이번주 급등주 받아보기</button>
         </div>
@@ -1260,15 +1260,27 @@ $("#f-phone").addEventListener("input", (e) => {
     : d.length < 8 ? d.slice(0, 3) + "-" + d.slice(3)
     : d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7);
 });
+
+/* 이름은 한글만 2~5자. 자모가 결합되는 중(한글 입력기 조합 중)에는 건드리지 않고,
+   글자가 완성될 때(조합 종료) 영문·숫자·기호·미완성 자모를 지운다. */
+const NAME_RE = /^[가-힣]{2,5}$/;
+const filterName = (el) => {
+  const v = el.value.replace(/[^가-힣]/g, "").slice(0, 5);
+  if (v !== el.value) el.value = v;
+};
+$("#f-name").addEventListener("input", (e) => { if (!e.isComposing) filterName(e.target); });
+$("#f-name").addEventListener("compositionend", (e) => filterName(e.target));
+
 $("#leadForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (editing) return toast("편집 모드에서는 신청이 동작하지 않습니다.", true);
   if (e.target.website.value) return;                       // 허니팟
 
+  filterName($("#f-name"));
   const name = $("#f-name").value.trim();
   const phone = $("#f-phone").value.replace(/\D/g, "");
 
-  if (name.length < 2) return toast("이름을 정확히 입력해 주세요.", true);
+  if (!NAME_RE.test(name)) return toast("이름은 한글 2~5자로 입력해 주세요.", true);
   if (!/^01[0-9]\d{7,8}$/.test(phone)) return toast("휴대폰 번호를 정확히 입력해 주세요.", true);
 
   const payload = { name, phone };
